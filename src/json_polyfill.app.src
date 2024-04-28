@@ -1,0 +1,16 @@
+{application, json_polyfill, [
+    {description, "A polyfill for the OTP json module (EEP68)"},
+    {vsn, "0.1.0"},
+    {registered, []},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {env, []},
+    {modules, []},
+    {licenses, ["Apache-2.0"]},
+    {links, [
+        {"GitHub", "https://github.com/williamthome/json_polyfill"},
+        {"Sponsor", "https://github.com/sponsors/williamthome"}
+    ]}
+ ]}.
