@@ -6,6 +6,24 @@ Its intent is to act as a polyfill for apps that cannot currently be updated to 
 
 The module and function names are exactly the same. Then, when your app supports OTP >= 27, just remove this lib from the dependencies.
 
+## Installation
+
+### Erlang
+
+```erlang
+% rebar.config
+{deps, [{json_polyfill, "0.1.0"}]}.
+```
+
+### Elixir
+
+```elixir
+# mix.exs
+def deps do
+  [{:json_polyfill, "~> 0.1.0"}]
+end
+```
+
 ## Encode
 
 ### encode/1
