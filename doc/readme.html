@@ -4,21 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.31.2">
-    <meta name="project" content="json_polyfill v0.1.0">
+    <meta name="generator" content="ExDoc v0.32.2">
+    <meta name="project" content="json_polyfill v0.1.1">
 
 
-    <title>Overview — json_polyfill v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-erlang-DUKXLSAT.css" />
+    <title>Overview — json_polyfill v0.1.1</title>
+    <link rel="stylesheet" href="dist/html-erlang-EBZIIHAS.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-911473E2.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-JRPQ5PR6.js"></script>
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-C63BFE8B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-BHYOTRCH.js"></script>
 
 
   </head>
@@ -37,13 +35,11 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
 <button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
-
-<div class="background-layer"></div>
 
 <nav id="sidebar" class="sidebar">
 
@@ -55,7 +51,7 @@
 json_polyfill
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v0.1.0
+          v0.1.1
         </div>
       </div>
     </div>
@@ -89,44 +85,66 @@ Pages
 
 <main class="content">
   <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-      <div class="top-search">
-        <div class="search-settings">
-          <form class="search-bar" action="search.html">
-            <label class="search-label">
-              <span class="sr-only">Search documentation of json_polyfill</span>
-              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-            </label>
-            <button type="submit" class="search-button" aria-label="Submit Search">
-              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
-            </button>
-            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-              <i class="ri-close-line ri-lg" title="Cancel search"></i>
-            </button>
-          </form>
-          <div class="autocomplete">
-          </div>
-          <button class="icon-settings display-settings">
-            <i class="ri-settings-3-line"></i>
-            <span class="sr-only">Settings</span>
+
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of json_polyfill</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
           </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
         </div>
-
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
       </div>
+    </div>
 
-<h1>
+<div id="top-content">
+  <h1>
 
-    <a href="https://github.com/williamthome/json_polyfill/blob/v0.1.0/README.md#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+      <a href="https://github.com/williamthome/json_polyfill/blob/v0.1.1/README.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
 
 
-  <span>json_polyfill</span>
-</h1>
+    <span>json_polyfill</span>
+  </h1>
 
-<p>This lib is just a copy of the <code class="inline">json</code> module proposed in <a href="https://www.erlang.org/eeps/eep-0068">EEP 68</a> and <a href="https://www.erlang.org/news/168#highlights-for-rc2">introduced in OTP 27</a> by <a href="https://github.com/michalmuskala">Michał Muskała</a>.</p><p>Its intent is to act as a polyfill for apps that cannot currently be updated to OTP 27 or higher.</p><p>The module and function names are exactly the same. Then, when your app supports OTP &gt;= 27, just remove this lib from the dependencies.</p><h2 id="encode" class="section-heading">
+<p>This lib is just a copy of the <code class="inline">json</code> module proposed in <a href="https://www.erlang.org/eeps/eep-0068">EEP 68</a> and <a href="https://www.erlang.org/news/168#highlights-for-rc2">introduced in OTP 27</a> by <a href="https://github.com/michalmuskala">Michał Muskała</a>.</p><p>Its intent is to act as a polyfill for apps that cannot currently be updated to OTP 27 or higher.</p><p>The module and function names are exactly the same. Then, when your app supports OTP &gt;= 27, just remove this lib from the dependencies.</p><h2 id="installation" class="section-heading">
+  <a href="#installation" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Installation</span>
+</h2>
+<h3 id="erlang" class="section-heading">
+  <a href="#erlang" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Erlang</span>
+</h3>
+<pre><code class="makeup erlang" translate="no"><span class="c1">% rebar.config</span><span class="w">
+</span><span class="p" data-group-id="3566195481-1">{</span><span class="ss">deps</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3566195481-2">[</span><span class="p" data-group-id="3566195481-3">{</span><span class="ss">json_polyfill</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;0.1.1&quot;</span><span class="p" data-group-id="3566195481-3">}</span><span class="p" data-group-id="3566195481-2">]</span><span class="p" data-group-id="3566195481-1">}</span><span class="p">.</span></code></pre><h3 id="elixir" class="section-heading">
+  <a href="#elixir" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Elixir</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="c1"># mix.exs</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="0007573478-1">do</span><span class="w">
+  </span><span class="p" data-group-id="0007573478-2">[</span><span class="p" data-group-id="0007573478-3">{</span><span class="ss">:json_polyfill</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.1&quot;</span><span class="p" data-group-id="0007573478-3">}</span><span class="p" data-group-id="0007573478-2">]</span><span class="w">
+</span><span class="k" data-group-id="0007573478-1">end</span></code></pre><h2 id="encode" class="section-heading">
   <a href="#encode" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -138,17 +156,17 @@ Pages
   </a>
   <span class="text">encode/1</span>
 </h3>
-<p>Generates JSON corresponding to <code class="inline">Term</code>.</p><p>Supports basic data mapping:</p><table><thead><tr><th style="text-align: left;"><strong>Erlang</strong></th><th style="text-align: left;"><strong>JSON</strong></th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">integer() | float()</code></td><td style="text-align: left;">Number</td></tr><tr><td style="text-align: left;"><code class="inline">true | false</code></td><td style="text-align: left;">Boolean</td></tr><tr><td style="text-align: left;"><code class="inline">null</code></td><td style="text-align: left;">Null</td></tr><tr><td style="text-align: left;"><code class="inline">binary()</code></td><td style="text-align: left;">String</td></tr><tr><td style="text-align: left;"><code class="inline">atom()</code></td><td style="text-align: left;">String</td></tr><tr><td style="text-align: left;"><code class="inline">list()</code></td><td style="text-align: left;">Array</td></tr><tr><td style="text-align: left;"><code class="inline">#{binary() =&gt; _}</code></td><td style="text-align: left;">Object</td></tr><tr><td style="text-align: left;"><code class="inline">#{atom() =&gt; _}</code></td><td style="text-align: left;">Object</td></tr><tr><td style="text-align: left;"><code class="inline">#{integer() =&gt; _}</code></td><td style="text-align: left;">Object</td></tr></tbody></table><p>This is equivalent to <code class="inline">encode(Term, fun json:encode_value/2)</code>.</p><h4>Example</h4><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nf">iolist_to_binary</span><span class="p" data-group-id="1950448041-1">(</span><span class="nc">json</span><span class="p">:</span><span class="nf">encode</span><span class="p" data-group-id="1950448041-2">(</span><span class="p" data-group-id="1950448041-3">#{</span><span class="ss">foo</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="s">&quot;bar&quot;</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="1950448041-3">}</span><span class="p" data-group-id="1950448041-2">)</span><span class="p" data-group-id="1950448041-1">)</span><span class="p">.</span><span class="w">
+<p>Generates JSON corresponding to <code class="inline">Term</code>.</p><p>Supports basic data mapping:</p><table><thead><tr><th style="text-align: left;"><strong>Erlang</strong></th><th style="text-align: left;"><strong>JSON</strong></th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">integer() | float()</code></td><td style="text-align: left;">Number</td></tr><tr><td style="text-align: left;"><code class="inline">true | false</code></td><td style="text-align: left;">Boolean</td></tr><tr><td style="text-align: left;"><code class="inline">null</code></td><td style="text-align: left;">Null</td></tr><tr><td style="text-align: left;"><code class="inline">binary()</code></td><td style="text-align: left;">String</td></tr><tr><td style="text-align: left;"><code class="inline">atom()</code></td><td style="text-align: left;">String</td></tr><tr><td style="text-align: left;"><code class="inline">list()</code></td><td style="text-align: left;">Array</td></tr><tr><td style="text-align: left;"><code class="inline">#{binary() =&gt; _}</code></td><td style="text-align: left;">Object</td></tr><tr><td style="text-align: left;"><code class="inline">#{atom() =&gt; _}</code></td><td style="text-align: left;">Object</td></tr><tr><td style="text-align: left;"><code class="inline">#{integer() =&gt; _}</code></td><td style="text-align: left;">Object</td></tr></tbody></table><p>This is equivalent to <code class="inline">encode(Term, fun json:encode_value/2)</code>.</p><h4>Example</h4><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nf">iolist_to_binary</span><span class="p" data-group-id="2745393224-1">(</span><span class="nc">json</span><span class="p">:</span><span class="nf">encode</span><span class="p" data-group-id="2745393224-2">(</span><span class="p" data-group-id="2745393224-3">#{</span><span class="ss">foo</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="s">&quot;bar&quot;</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="2745393224-3">}</span><span class="p" data-group-id="2745393224-2">)</span><span class="p" data-group-id="2745393224-1">)</span><span class="p">.</span><span class="w">
 </span><span class="p">&lt;&lt;</span><span class="s">&quot;{\&quot;foo\&quot;:\&quot;bar\&quot;}&quot;</span><span class="p">&gt;&gt;</span></code></pre><h3 id="encode-2" class="section-heading">
   <a href="#encode-2" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">encode/2</span>
 </h3>
-<p>Generates JSON corresponding to <code class="inline">Term</code>.</p><p>Can be customised with the <code class="inline">Encoder</code> callback. The callback will be recursively called for all the data to be encoded and is expected to return the corresponding encoded JSON as iodata.</p><p>Various <code class="inline">encode_*</code> functions in this module can be used to help in constructing such callbacks.</p><h4>Example</h4><p>An encoder that uses a heuristic to differentiate object-like lists of key-value pairs from plain lists:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nf">encoder</span><span class="p" data-group-id="7225542862-1">(</span><span class="p" data-group-id="7225542862-2">[</span><span class="p" data-group-id="7225542862-3">{</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="7225542862-3">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="7225542862-2">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="7225542862-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">json</span><span class="p">:</span><span class="nf">encode_key_value_list</span><span class="p" data-group-id="7225542862-4">(</span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="7225542862-4">)</span><span class="p">;</span><span class="gp unselectable">
-&gt; </span><span class="nf">encoder</span><span class="p" data-group-id="7225542862-5">(</span><span class="n">Other</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="7225542862-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">json</span><span class="p">:</span><span class="nf">encode_value</span><span class="p" data-group-id="7225542862-6">(</span><span class="n">Other</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="7225542862-6">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="nf">custom_encode</span><span class="p" data-group-id="7225542862-7">(</span><span class="n">Value</span><span class="p" data-group-id="7225542862-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">json</span><span class="p">:</span><span class="nf">encode</span><span class="p" data-group-id="7225542862-8">(</span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="nf">fun</span><span class="p" data-group-id="7225542862-9">(</span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="7225542862-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">encoder</span><span class="p" data-group-id="7225542862-10">(</span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="7225542862-10">)</span><span class="w"> </span><span class="k">end</span><span class="p" data-group-id="7225542862-8">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="nf">iolist_to_binary</span><span class="p" data-group-id="7225542862-11">(</span><span class="nf">custom_encode</span><span class="p" data-group-id="7225542862-12">(</span><span class="p" data-group-id="7225542862-13">[</span><span class="p" data-group-id="7225542862-14">{</span><span class="ss">a</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7225542862-15">[</span><span class="p" data-group-id="7225542862-15">]</span><span class="p" data-group-id="7225542862-14">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7225542862-16">{</span><span class="ss">b</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7225542862-16">}</span><span class="p" data-group-id="7225542862-13">]</span><span class="p" data-group-id="7225542862-12">)</span><span class="p" data-group-id="7225542862-11">)</span><span class="p">.</span><span class="w">
+<p>Generates JSON corresponding to <code class="inline">Term</code>.</p><p>Can be customised with the <code class="inline">Encoder</code> callback. The callback will be recursively called for all the data to be encoded and is expected to return the corresponding encoded JSON as iodata.</p><p>Various <code class="inline">encode_*</code> functions in this module can be used to help in constructing such callbacks.</p><h4>Example</h4><p>An encoder that uses a heuristic to differentiate object-like lists of key-value pairs from plain lists:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nf">encoder</span><span class="p" data-group-id="9215609810-1">(</span><span class="p" data-group-id="9215609810-2">[</span><span class="p" data-group-id="9215609810-3">{</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="9215609810-3">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="9215609810-2">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="9215609810-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">json</span><span class="p">:</span><span class="nf">encode_key_value_list</span><span class="p" data-group-id="9215609810-4">(</span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="9215609810-4">)</span><span class="p">;</span><span class="gp unselectable">
+&gt; </span><span class="nf">encoder</span><span class="p" data-group-id="9215609810-5">(</span><span class="n">Other</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="9215609810-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">json</span><span class="p">:</span><span class="nf">encode_value</span><span class="p" data-group-id="9215609810-6">(</span><span class="n">Other</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="9215609810-6">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nf">custom_encode</span><span class="p" data-group-id="9215609810-7">(</span><span class="n">Value</span><span class="p" data-group-id="9215609810-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">json</span><span class="p">:</span><span class="nf">encode</span><span class="p" data-group-id="9215609810-8">(</span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="nf">fun</span><span class="p" data-group-id="9215609810-9">(</span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="9215609810-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">encoder</span><span class="p" data-group-id="9215609810-10">(</span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="n">Encode</span><span class="p" data-group-id="9215609810-10">)</span><span class="w"> </span><span class="k">end</span><span class="p" data-group-id="9215609810-8">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nf">iolist_to_binary</span><span class="p" data-group-id="9215609810-11">(</span><span class="nf">custom_encode</span><span class="p" data-group-id="9215609810-12">(</span><span class="p" data-group-id="9215609810-13">[</span><span class="p" data-group-id="9215609810-14">{</span><span class="ss">a</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9215609810-15">[</span><span class="p" data-group-id="9215609810-15">]</span><span class="p" data-group-id="9215609810-14">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9215609810-16">{</span><span class="ss">b</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9215609810-16">}</span><span class="p" data-group-id="9215609810-13">]</span><span class="p" data-group-id="9215609810-12">)</span><span class="p" data-group-id="9215609810-11">)</span><span class="p">.</span><span class="w">
 </span><span class="p">&lt;&lt;</span><span class="s">&quot;{\&quot;a\&quot;:[],\&quot;b\&quot;:1}&quot;</span><span class="p">&gt;&gt;</span></code></pre><h2 id="decode" class="section-heading">
   <a href="#decode" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -161,16 +179,16 @@ Pages
   </a>
   <span class="text">decode/1</span>
 </h3>
-<p>Parses a JSON value from <code class="inline">Binary</code>.</p><p>Supports basic data mapping:</p><table><thead><tr><th style="text-align: left;"><strong>JSON</strong></th><th style="text-align: left;"><strong>Erlang</strong></th></tr></thead><tbody><tr><td style="text-align: left;">Number</td><td style="text-align: left;"><code class="inline">integer() | float()</code></td></tr><tr><td style="text-align: left;">Boolean</td><td style="text-align: left;"><code class="inline">true | false</code></td></tr><tr><td style="text-align: left;">Null</td><td style="text-align: left;"><code class="inline">null</code></td></tr><tr><td style="text-align: left;">String</td><td style="text-align: left;"><code class="inline">binary()</code></td></tr><tr><td style="text-align: left;">Object</td><td style="text-align: left;"><code class="inline">#{binary() =&gt; _}</code></td></tr></tbody></table><h4>Errors</h4><ul><li><code class="inline">error(unexpected_end)</code> if <code class="inline">Binary</code> contains incomplete JSON value</li><li><code class="inline">error({invalid_byte, Byte})</code> if <code class="inline">Binary</code> contains unexpected byte or invalid UTF-8 byte</li><li><code class="inline">error({invalid_sequence, Bytes})</code> if <code class="inline">Binary</code> contains invalid UTF-8 escape</li></ul><h4>Example</h4><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">json</span><span class="p">:</span><span class="nf">decode</span><span class="p" data-group-id="3101376234-1">(</span><span class="p">&lt;&lt;</span><span class="s">&quot;{\&quot;foo\&quot;: 1}&quot;</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="3101376234-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="3101376234-2">#{</span><span class="p">&lt;&lt;</span><span class="s">&quot;foo&quot;</span><span class="p">&gt;&gt;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3101376234-2">}</span></code></pre><h3 id="decode-3" class="section-heading">
+<p>Parses a JSON value from <code class="inline">Binary</code>.</p><p>Supports basic data mapping:</p><table><thead><tr><th style="text-align: left;"><strong>JSON</strong></th><th style="text-align: left;"><strong>Erlang</strong></th></tr></thead><tbody><tr><td style="text-align: left;">Number</td><td style="text-align: left;"><code class="inline">integer() | float()</code></td></tr><tr><td style="text-align: left;">Boolean</td><td style="text-align: left;"><code class="inline">true | false</code></td></tr><tr><td style="text-align: left;">Null</td><td style="text-align: left;"><code class="inline">null</code></td></tr><tr><td style="text-align: left;">String</td><td style="text-align: left;"><code class="inline">binary()</code></td></tr><tr><td style="text-align: left;">Object</td><td style="text-align: left;"><code class="inline">#{binary() =&gt; _}</code></td></tr></tbody></table><h4>Errors</h4><ul><li><code class="inline">error(unexpected_end)</code> if <code class="inline">Binary</code> contains incomplete JSON value</li><li><code class="inline">error({invalid_byte, Byte})</code> if <code class="inline">Binary</code> contains unexpected byte or invalid UTF-8 byte</li><li><code class="inline">error({invalid_sequence, Bytes})</code> if <code class="inline">Binary</code> contains invalid UTF-8 escape</li></ul><h4>Example</h4><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">json</span><span class="p">:</span><span class="nf">decode</span><span class="p" data-group-id="0606658661-1">(</span><span class="p">&lt;&lt;</span><span class="s">&quot;{\&quot;foo\&quot;: 1}&quot;</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="0606658661-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="0606658661-2">#{</span><span class="p">&lt;&lt;</span><span class="s">&quot;foo&quot;</span><span class="p">&gt;&gt;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="0606658661-2">}</span></code></pre><h3 id="decode-3" class="section-heading">
   <a href="#decode-3" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">decode/3</span>
 </h3>
-<p>Parses a JSON value from <code class="inline">Binary</code>.</p><p>Similar to <code class="inline">decode/1</code> except the decoding process can be customized with the callbacks specified in <code class="inline">Decoders</code>. The callbacks will use the <code class="inline">Acc</code> value as the initial accumulator.</p><p>Any leftover, unparsed data in <code class="inline">Binary</code> will be returned.</p><h4>Default callbacks</h4><p>All callbacks are optional. If not provided, they will fall back to implementations used by the <code class="inline">decode/1</code> function:</p><ul><li>for <code class="inline">array_start</code>: <code class="inline">fun(_) -&gt; [] end</code></li><li><p>for <code class="inline">array_push</code>: <code class="inline">fun(Elem, Acc) -&gt; [Elem | Acc] end</code></p></li><li>for <code class="inline">array_finish</code>: <code class="inline">fun(Acc, OldAcc) -&gt; {lists:reverse(Acc), OldAcc} end</code></li><li>for <code class="inline">object_start</code>: <code class="inline">fun(_) -&gt; [] end</code></li><li><p>for <code class="inline">object_push</code>: <code class="inline">fun(Key, Value, Acc) -&gt; [{Key, Value} | Acc] end</code></p></li><li>for <code class="inline">object_finish</code>: <code class="inline">fun(Acc, OldAcc) -&gt; {maps:from_list(Acc), OldAcc} end</code></li><li>for <code class="inline">float</code>: <code class="inline">fun erlang:binary_to_float/1</code></li><li>for <code class="inline">integer</code>: <code class="inline">fun erlang:binary_to_integer/1</code></li><li>for <code class="inline">string</code>: <code class="inline">fun (Value) -&gt; Value end</code></li><li>for <code class="inline">null</code>: the atom <code class="inline">null</code></li></ul><h4>Errors</h4><ul><li><code class="inline">error({invalid_byte, Byte})</code> if <code class="inline">Binary</code> contains unexpected byte or invalid UTF-8 byte</li><li><code class="inline">error({invalid_sequence, Bytes})</code> if <code class="inline">Binary</code> contains invalid UTF-8 escape</li><li><code class="inline">error(unexpected_end)</code> if <code class="inline">Binary</code> contains incomplete JSON value</li></ul><h4>Example</h4><p>Decoding object keys as atoms:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="n">Push</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fun</span><span class="p" data-group-id="2594843999-1">(</span><span class="n">Key</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="2594843999-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="2594843999-2">[</span><span class="p" data-group-id="2594843999-3">{</span><span class="nf">binary_to_existing_atom</span><span class="p" data-group-id="2594843999-4">(</span><span class="n">Key</span><span class="p" data-group-id="2594843999-4">)</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="p" data-group-id="2594843999-3">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="2594843999-2">]</span><span class="w"> </span><span class="k">end</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="nc">json</span><span class="p">:</span><span class="nf">decode</span><span class="p" data-group-id="2594843999-5">(</span><span class="p">&lt;&lt;</span><span class="s">&quot;{\&quot;foo\&quot;: 1}&quot;</span><span class="p">&gt;&gt;</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2594843999-6">#{</span><span class="ss">object_push</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Push</span><span class="p" data-group-id="2594843999-6">}</span><span class="p" data-group-id="2594843999-5">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="2594843999-7">{</span><span class="p" data-group-id="2594843999-8">#{</span><span class="ss">foo</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="2594843999-8">}</span><span class="p">,</span><span class="ss">ok</span><span class="p">,</span><span class="p">&lt;&lt;</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="2594843999-7">}</span></code></pre><h2 id="license" class="section-heading">
+<p>Parses a JSON value from <code class="inline">Binary</code>.</p><p>Similar to <code class="inline">decode/1</code> except the decoding process can be customized with the callbacks specified in <code class="inline">Decoders</code>. The callbacks will use the <code class="inline">Acc</code> value as the initial accumulator.</p><p>Any leftover, unparsed data in <code class="inline">Binary</code> will be returned.</p><h4>Default callbacks</h4><p>All callbacks are optional. If not provided, they will fall back to implementations used by the <code class="inline">decode/1</code> function:</p><ul><li>for <code class="inline">array_start</code>: <code class="inline">fun(_) -&gt; [] end</code></li><li><p>for <code class="inline">array_push</code>: <code class="inline">fun(Elem, Acc) -&gt; [Elem | Acc] end</code></p></li><li>for <code class="inline">array_finish</code>: <code class="inline">fun(Acc, OldAcc) -&gt; {lists:reverse(Acc), OldAcc} end</code></li><li>for <code class="inline">object_start</code>: <code class="inline">fun(_) -&gt; [] end</code></li><li><p>for <code class="inline">object_push</code>: <code class="inline">fun(Key, Value, Acc) -&gt; [{Key, Value} | Acc] end</code></p></li><li>for <code class="inline">object_finish</code>: <code class="inline">fun(Acc, OldAcc) -&gt; {maps:from_list(Acc), OldAcc} end</code></li><li>for <code class="inline">float</code>: <code class="inline">fun erlang:binary_to_float/1</code></li><li>for <code class="inline">integer</code>: <code class="inline">fun erlang:binary_to_integer/1</code></li><li>for <code class="inline">string</code>: <code class="inline">fun (Value) -&gt; Value end</code></li><li>for <code class="inline">null</code>: the atom <code class="inline">null</code></li></ul><h4>Errors</h4><ul><li><code class="inline">error({invalid_byte, Byte})</code> if <code class="inline">Binary</code> contains unexpected byte or invalid UTF-8 byte</li><li><code class="inline">error({invalid_sequence, Bytes})</code> if <code class="inline">Binary</code> contains invalid UTF-8 escape</li><li><code class="inline">error(unexpected_end)</code> if <code class="inline">Binary</code> contains incomplete JSON value</li></ul><h4>Example</h4><p>Decoding object keys as atoms:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="n">Push</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fun</span><span class="p" data-group-id="1327382492-1">(</span><span class="n">Key</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="1327382492-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="1327382492-2">[</span><span class="p" data-group-id="1327382492-3">{</span><span class="nf">binary_to_existing_atom</span><span class="p" data-group-id="1327382492-4">(</span><span class="n">Key</span><span class="p" data-group-id="1327382492-4">)</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="p" data-group-id="1327382492-3">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="1327382492-2">]</span><span class="w"> </span><span class="k">end</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nc">json</span><span class="p">:</span><span class="nf">decode</span><span class="p" data-group-id="1327382492-5">(</span><span class="p">&lt;&lt;</span><span class="s">&quot;{\&quot;foo\&quot;: 1}&quot;</span><span class="p">&gt;&gt;</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1327382492-6">#{</span><span class="ss">object_push</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Push</span><span class="p" data-group-id="1327382492-6">}</span><span class="p" data-group-id="1327382492-5">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="1327382492-7">{</span><span class="p" data-group-id="1327382492-8">#{</span><span class="ss">foo</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1327382492-8">}</span><span class="p">,</span><span class="ss">ok</span><span class="p">,</span><span class="p">&lt;&lt;</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="1327382492-7">}</span></code></pre><h2 id="license" class="section-heading">
   <a href="#license" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -183,7 +201,9 @@ distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.</p><p>%CopyrightEnd%</p></blockquote>
-<div class="bottom-actions">
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
   <div class="bottom-actions-item">
 
       <a href="api-reference.html" class="bottom-actions-button" rel="prev">
@@ -209,40 +229,39 @@ License
 
   </div>
 </div>
-      <footer class="footer">
-        <p>
-
-            <span class="line">
-              <a href="https://hex.pm/packages/json_polyfill/0.1.0" class="footer-hex-package">Hex Package</a>
-
-              <a href="https://preview.hex.pm/preview/json_polyfill/0.1.0">Hex Preview</a>
-
-                (<a href="https://preview.hex.pm/preview/json_polyfill/0.1.0/show/README.md">current file</a>)
-
-            </span>
+    <footer class="footer">
+      <p>
 
           <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+            <a href="https://hex.pm/packages/json_polyfill/0.1.1" class="footer-hex-package">Hex Package</a>
 
-              <a href="json_polyfill.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="https://preview.hex.pm/preview/json_polyfill/0.1.1">Hex Preview</a>
+
+              (<a href="https://preview.hex.pm/preview/json_polyfill/0.1.1/show/README.md">current file</a>)
 
           </span>
-        </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.2) for the
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-            <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+            <a href="json_polyfill.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-        </p>
+        </span>
+      </p>
 
-      </footer>
-    </div>
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.2) for the
+
+          <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+
+      </p>
+
+    </footer>
   </div>
 </main>
 </div>
