@@ -236,7 +236,9 @@ encode_map(Map, Encode) when is_map(Map) ->
     do_encode_map(Map, Encode).
 
 do_encode_map(Map, Encode) when is_function(Encode, 2) ->
-    encode_object([[$,, key(Key, Encode), $: | Encode(Value, Encode)] || Key := Value <- Map]).
+    encode_object(maps:fold(fun(Key, Value, Acc) ->
+        [[$,, key(Key, Encode), $: | Encode(Value, Encode)] | Acc]
+    end, [], Map)).
 
 %% @doc
 %% Encoder for maps as JSON objects.
