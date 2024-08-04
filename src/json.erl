@@ -235,10 +235,15 @@ list_loop([Elem | Rest], Encode) -> [$,, Encode(Elem, Encode) | list_loop(Rest, 
 encode_map(Map, Encode) when is_map(Map) ->
     do_encode_map(Map, Encode).
 
+-if(?OTP_RELEASE >= 26).
+do_encode_map(Map, Encode) when is_function(Encode, 2) ->
+    encode_object([[$,, key(Key, Encode), $: | Encode(Value, Encode)] || Key := Value <- Map]).
+-else.
 do_encode_map(Map, Encode) when is_function(Encode, 2) ->
     encode_object(maps:fold(fun(Key, Value, Acc) ->
         [[$,, key(Key, Encode), $: | Encode(Value, Encode)] | Acc]
     end, [], Map)).
+-endif.
 
 %% @doc
 %% Encoder for maps as JSON objects.
