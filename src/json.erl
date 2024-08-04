@@ -88,7 +88,7 @@
 %% Encoding implementation
 %%
 
--type encoder() :: fun((dynamic(), encoder()) -> iodata()).
+-type encoder() :: fun((term(), encoder()) -> iodata()).
 
 -type encode_value() ::
     integer()
@@ -156,7 +156,7 @@ encode(Term) -> encode(Term, fun do_encode/2).
 %% <<"{\"a\":[],\"b\":1}">>
 %% '''
 %% @end
--spec encode(dynamic(), encoder()) -> iodata().
+-spec encode(term(), encoder()) -> iodata().
 encode(Term, Encoder) when is_function(Encoder, 2) ->
     Encoder(Term, Encoder).
 
@@ -165,11 +165,11 @@ encode(Term, Encoder) when is_function(Encoder, 2) ->
 %%
 %% Recursively calls `Encode' on all the values in `Value'.
 %% @end
--spec encode_value(dynamic(), encoder()) -> iodata().
+-spec encode_value(term(), encoder()) -> iodata().
 encode_value(Value, Encode) ->
     do_encode(Value, Encode).
 
--spec do_encode(dynamic(), encoder()) -> iodata().
+-spec do_encode(term(), encoder()) -> iodata().
 do_encode(Value, Encode) when is_atom(Value) ->
     encode_atom(Value, Encode);
 do_encode(Value, _Encode) when is_binary(Value) ->
@@ -231,7 +231,7 @@ list_loop([Elem | Rest], Encode) -> [$,, Encode(Elem, Encode) | list_loop(Rest, 
 %%
 %% Accepts maps with atom, binary, integer, or float keys.
 %% @end
--spec encode_map(encode_map(dynamic()), encoder()) -> iodata().
+-spec encode_map(encode_map(term()), encoder()) -> iodata().
 encode_map(Map, Encode) when is_map(Map) ->
     do_encode_map(Map, Encode).
 
@@ -525,13 +525,13 @@ error_info(Skip) ->
 -define(ARRAY, array).
 -define(OBJECT, object).
 
--type from_binary_fun() :: fun((binary()) -> dynamic()).
--type array_start_fun() :: fun((Acc :: dynamic()) -> ArrayAcc :: dynamic()).
--type array_push_fun() :: fun((Value :: dynamic(), Acc :: dynamic()) -> NewAcc :: dynamic()).
--type array_finish_fun() :: fun((ArrayAcc :: dynamic(), OldAcc :: dynamic()) -> {dynamic(), dynamic()}).
--type object_start_fun() :: fun((Acc :: dynamic()) -> ObjectAcc :: dynamic()).
--type object_push_fun() :: fun((Key :: dynamic(), Value :: dynamic(), Acc :: dynamic()) -> NewAcc :: dynamic()).
--type object_finish_fun() :: fun((ObjectAcc :: dynamic(), OldAcc :: dynamic()) -> {dynamic(), dynamic()}).
+-type from_binary_fun() :: fun((binary()) -> term()).
+-type array_start_fun() :: fun((Acc :: term()) -> ArrayAcc :: term()).
+-type array_push_fun() :: fun((Value :: term(), Acc :: term()) -> NewAcc :: term()).
+-type array_finish_fun() :: fun((ArrayAcc :: term(), OldAcc :: term()) -> {term(), term()}).
+-type object_start_fun() :: fun((Acc :: term()) -> ObjectAcc :: term()).
+-type object_push_fun() :: fun((Key :: term(), Value :: term(), Acc :: term()) -> NewAcc :: term()).
+-type object_finish_fun() :: fun((ObjectAcc :: term(), OldAcc :: term()) -> {term(), term()}).
 
 -type decoders() :: #{
     array_start => array_start_fun(),
@@ -559,7 +559,7 @@ error_info(Skip) ->
     null = null :: term()
 }).
 
--type acc() :: dynamic().
+-type acc() :: term().
 -type stack() :: [?ARRAY | ?OBJECT | binary() | acc()].
 -type decode() :: #decode{}.
 
@@ -657,8 +657,8 @@ decode(Binary) when is_binary(Binary) ->
 %% {#{foo => 1},ok,<<>>}
 %% '''
 %% @end
--spec decode(binary(), dynamic(), decoders()) ->
-          {Result :: dynamic(), Acc :: dynamic(), binary()}.
+-spec decode(binary(), term(), decoders()) ->
+          {Result :: term(), Acc :: term(), binary()}.
 decode(Binary, Acc0, Decoders) when is_binary(Binary) ->
     Decode = maps:fold(fun parse_decoder/3, #decode{}, Decoders),
     case value(Binary, Binary, 0, Acc0, [], Decode) of
@@ -679,8 +679,8 @@ decode(Binary, Acc0, Decoders) when is_binary(Binary) ->
 %% returns `{continue, State}' for incomplete data,
 %% the `State' can be fed to the `decode_continue/2' function when more data is available.
 %% @end
--spec decode_start(binary(), dynamic(), decoders()) ->
-          {Result :: dynamic(), Acc :: dynamic(), binary()} | {continue, continuation_state()}.
+-spec decode_start(binary(), term(), decoders()) ->
+          {Result :: term(), Acc :: term(), binary()} | {continue, continuation_state()}.
 decode_start(Binary, Acc, Decoders) when is_binary(Binary) ->
     Decode = maps:fold(fun parse_decoder/3, #decode{}, Decoders),
     value(Binary, Binary, 0, Acc, [], Decode).
@@ -704,7 +704,7 @@ decode_start(Binary, Acc, Decoders) when is_binary(Binary) ->
 %% '''
 %% @end
 -spec decode_continue(binary() | end_of_input, Opaque::term()) ->
-          {Result :: dynamic(), Acc :: dynamic(), binary()} | {continue, continuation_state()}.
+          {Result :: term(), Acc :: term(), binary()} | {continue, continuation_state()}.
 decode_continue(end_of_input, State) ->
     case State of
         {_, Acc, [], _Decode, {number, Val}} ->
@@ -903,7 +903,7 @@ string_ascii(Binary, Original, Skip, Acc, Stack, Decode, Len) ->
             string(Other, Original, Skip, Acc, Stack, Decode, Len)
     end.
 
--spec string(binary(), binary(), integer(), acc(), stack(), decode(), integer()) -> dynamic().
+-spec string(binary(), binary(), integer(), acc(), stack(), decode(), integer()) -> term().
 string(<<Byte, Rest/bits>>, Orig, Skip, Acc, Stack, Decode, Len) when ?is_ascii_plain(Byte) ->
     string(Rest, Orig, Skip, Acc, Stack, Decode, Len + 1);
 string(<<$\\, Rest/bits>>, Orig, Skip, Acc, Stack, Decode, Len) ->
@@ -946,7 +946,7 @@ string_ascii(Binary, Original, Skip, Acc, Stack, Decode, Start, Len, SAcc) ->
             string(Other, Original, Skip, Acc, Stack, Decode, Start, Len, SAcc)
     end.
 
--spec string(binary(), binary(), integer(), acc(), stack(), decode(), integer(), integer(), binary()) -> dynamic().
+-spec string(binary(), binary(), integer(), acc(), stack(), decode(), integer(), integer(), binary()) -> term().
 string(<<Byte, Rest/bits>>, Orig, Skip, Acc, Stack, Decode, Start, Len, SAcc) when ?is_ascii_plain(Byte) ->
     string(Rest, Orig, Skip, Acc, Stack, Decode, Start, Len + 1, SAcc);
 string(<<$\\, Rest/bits>>, Orig, Skip, Acc, Stack, Decode, Start, Len, SAcc) ->
