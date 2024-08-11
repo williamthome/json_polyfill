@@ -1,0 +1,15 @@
+OtpVersion = list_to_integer(erlang:system_info(otp_release)),
+
+Hooks = case lists:keyfind(post_hooks, 1, CONFIG) of
+    false -> [];
+    {post_hooks, V} -> V
+end,
+
+NewHooks = case OtpVersion >= 27 of
+    true ->
+        [{erlc_compile, "rm \"$REBAR_DEPS_DIR/json_polyfill/ebin/json.beam\""}];
+    false ->
+        []
+end,
+
+lists:keystore(erl_opts, 1, CONFIG, {post_hooks, Hooks ++ NewHooks}).
