@@ -12,7 +12,7 @@ The module and function names are exactly the same. Then, when your app supports
 
 ```erlang
 % rebar.config
-{deps, [{json_polyfill, "0.1.3"}]}.
+{deps, [{json_polyfill, "0.1.4"}]}.
 ```
 
 ### Elixir
@@ -20,7 +20,7 @@ The module and function names are exactly the same. Then, when your app supports
 ```elixir
 # mix.exs
 def deps do
-  [{:json_polyfill, "~> 0.1.3"}]
+  [{:json_polyfill, "~> 0.1.4"}]
 end
 ```
 
