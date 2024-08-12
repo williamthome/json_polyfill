@@ -209,7 +209,11 @@ encode_integer(Integer) -> integer_to_binary(Integer).
 %% Default encoder for floats as JSON numbers used by `json:encode/1'.
 %% @end
 -spec encode_float(float()) -> iodata().
+-if(?OTP_RELEASE > 24).
 encode_float(Float) -> float_to_binary(Float, [short]).
+-else.
+encode_float(Float) -> float_to_binary(Float, [compact, {decimals, 10}]).
+-endif.
 
 %% @doc
 %% Default encoder for lists as JSON arrays used by `json:encode/1'.
