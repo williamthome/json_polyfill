@@ -25,23 +25,6 @@
 -module(json_polyfill_SUITE).
 -include_lib("stdlib/include/assert.hrl").
 
--if(?OTP_RELEASE >= 27).
--export([all/0, encode/1, decode/1]).
-
-all() -> [encode, decode].
-
-encode(_Config) ->
-    ?assertEqual(
-       [$", <<"foo">>, $"],
-       json:encode(foo)
-    ).
-
-decode(_Config) ->
-    ?assertEqual(
-       <<"foo">>,
-       json:decode(<<"\"foo\"">>)
-    ).
--else.
 %% Test server specific exports
 -export([all/0, suite/0, groups/0, init_per_group/2, end_per_group/2]).
 
@@ -1090,4 +1073,3 @@ counterexamples(_Config) ->
     ?assertEqual(Value, decode_io(encode(Value))).
 
 decode_io(IOList) -> decode(iolist_to_binary(IOList)).
--endif.
