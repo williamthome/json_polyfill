@@ -346,55 +346,55 @@ format(Term) -> iolist_to_binary(json:format(Term)).
 format(Term, Arg) -> iolist_to_binary(json:format(Term, Arg)).
 
 test_format_list(_Config) ->
-    ?assertEqual(~"[]\n", format([])),
+    ?assertEqual(<<"[]\n"/utf8>>, format([])),
 
-    List10 = ~'[1,2,3,4,5,6,7,8,9,10]\n',
+    List10 = <<"[1,2,3,4,5,6,7,8,9,10]\n"/utf8>>,
     ?assertEqual(List10, format(lists:seq(1,10))),
 
-    ListWithLists = ~"""
-    [
-      [1,2],
-      [3,4]
-    ]
-    """,
+    ListWithLists = <<
+    "[\n"
+    "  [1,2],\n"
+    "  [3,4]\n"
+    "]\n"
+    /utf8>>,
     ?assertEqual(ListWithLists, format([[1,2],[3,4]])),
 
-    ListWithListWithList = ~"""
-    [
-      [
-        []
-      ],
-      [
-        [3,4]
-      ]
-    ]
-    """,
+    ListWithListWithList = <<
+    "[\n"
+    "  [\n"
+    "    []\n"
+    "  ],\n"
+    "  [\n"
+    "    [3,4]\n"
+    "  ]\n"
+    "]\n"
+    /utf8>>,
     ?assertEqual(ListWithListWithList, format([[[]],[[3,4]]])),
 
-    ListWithMap = ~"""
-    [
-      { "key": 1 }
-    ]
-    """,
+    ListWithMap = <<
+    "[\n"
+    "  { \"key\": 1 }\n"
+    "]\n"
+    /utf8>>,
     ?assertEqual(ListWithMap, format([#{key => 1}])),
 
-    ListList10 = ~"""
-    [
-        [1,2,3,4,5,
-            6,7,8,9,
-            10]
-    ]
-    """,
+    ListList10 = <<
+    "[\n"
+    "    [1,2,3,4,5,\n"
+    "        6,7,8,9,\n"
+    "        10]\n"
+    "]\n"
+    /utf8>>,
     ?assertEqual(ListList10, format([lists:seq(1,10)], #{indent => 4, max => 14})),
 
-    ListString = ~"""
-    [
-       "foo",
-       "bar",
-       "baz"
-    ]
-    """,
-    ?assertEqual(ListString, format([~"foo", ~"bar", ~"baz"], #{indent => 3})),
+    ListString = <<
+    "[\n"
+    "   \"foo\",\n"
+    "   \"bar\",\n"
+    "   \"baz\"\n"
+    "]\n"
+    /utf8>>,
+    ?assertEqual(ListString, format([<<"foo"/utf8>>, <<"bar"/utf8>>, <<"baz"/utf8>>], #{indent => 3})),
     ok.
 
 test_format_proplist(_Config) ->
@@ -406,153 +406,153 @@ test_format_proplist(_Config) ->
                         json:format_value(Other, Fun, State)
                 end,
 
-    ?assertEqual(~"""
-                  {
-                    "a": 1,
-                    "b": "str"
-                  }
-                  """, format({kvlist, [{a, 1}, {b, ~"str"}]}, Formatter)),
+    ?assertEqual(<<
+                  "{\n"
+                  "  \"a\": 1,\n"
+                  "  \"b\": \"str\"\n"
+                  "}\n"
+                  /utf8>>, format({kvlist, [{a, 1}, {b, <<"str"/utf8>>}]}, Formatter)),
 
-    ?assertEqual(~"""
-                  {
-                    "a": 1,
-                    "b": "str"
-                  }
-                  """, format({kvlist_checked, [{a, 1}, {b, ~"str"}]}, Formatter)),
+    ?assertEqual(<<
+                  "{\n"
+                  "  \"a\": 1,\n"
+                  "  \"b\": \"str\"\n"
+                  "}\n"
+                  /utf8>>, format({kvlist_checked, [{a, 1}, {b, <<"str"/utf8>>}]}, Formatter)),
 
-    ?assertEqual(~"""
-                  {
-                    "10": 1.0,
-                    "1.0": 10,
-                    "a": "αβ",
-                    "αβ": "a"
-                  }
-                  """, format({kvlist, [{10, 1.0},
+    ?assertEqual(<<
+                  "{\n"
+                  "  \"10\": 1.0,\n"
+                  "  \"1.0\": 10,\n"
+                  "  \"a\": \"αβ\",\n"
+                  "  \"αβ\": \"a\"\n"
+                  "}\n"
+                  /utf8>>, format({kvlist, [{10, 1.0},
                                         {1.0, 10},
-                                        {a, ~"αβ"},
-                                        {~"αβ", a}
+                                        {a, <<"αβ"/utf8>>},
+                                        {<<"αβ"/utf8>>, a}
                                        ]}, Formatter)),
 
-    ?assertEqual(~"""
-                  {
-                    "10": 1.0,
-                    "1.0": 10,
-                    "a": "αβ",
-                    "αβ": "a"
-                  }
-                  """, format({kvlist_checked, [{10, 1.0},
+    ?assertEqual(<<
+                  "{\n"
+                  "  \"10\": 1.0,\n"
+                  "  \"1.0\": 10,\n"
+                  "  \"a\": \"αβ\",\n"
+                  "  \"αβ\": \"a\"\n"
+                  "}\n"
+                  /utf8>>, format({kvlist_checked, [{10, 1.0},
                                                 {1.0, 10},
-                                                {a, ~"αβ"},
-                                                {~"αβ", a}
+                                                {a, <<"αβ"/utf8>>},
+                                                {<<"αβ"/utf8>>, a}
                                                ]}, Formatter)),
 
-    ?assertEqual(~"""
-                  {
-                    "a": 1,
-                    "b": {
-                      "aa": 10,
-                      "bb": 20
-                    },
-                    "c": "str"
-                  }
-                  """, format({kvlist, [{a, 1},
+    ?assertEqual(<<
+                  "{\n"
+                  "  \"a\": 1,\n"
+                  "  \"b\": {\n"
+                  "    \"aa\": 10,\n"
+                  "    \"bb\": 20\n"
+                  "  },\n"
+                  "  \"c\": \"str\"\n"
+                  "}\n"
+                  /utf8>>, format({kvlist, [{a, 1},
                                         {b, {kvlist, [{aa, 10}, {bb, 20}]}},
-                                        {c, ~"str"}
+                                        {c, <<"str"/utf8>>}
                                        ]}, Formatter)),
 
-    ?assertEqual(~"""
-                  [{
-                      "a1": 1,
-                      "b1": [{
-                          "a11": 1,
-                          "b11": 2
-                        },{
-                          "a12": 3,
-                          "b12": 4
-                        }],
-                      "c1": "str1"
-                    },
-                    {
-                      "a2": 2,
-                      "b2": [{
-                          "a21": 5,
-                          "b21": 6
-                        },{
-                          "a22": 7,
-                          "b22": 8
-                        }],
-                      "c2": "str2"
-                    }]
-                  """, format([{kvlist, [{a1, 1},
+    ?assertEqual(<<
+                  "[{\n"
+                  "    \"a1\": 1,\n"
+                  "    \"b1\": [{\n"
+                  "        \"a11\": 1,\n"
+                  "        \"b11\": 2\n"
+                  "      },{\n"
+                  "        \"a12\": 3,\n"
+                  "        \"b12\": 4\n"
+                  "      }],\n"
+                  "    \"c1\": \"str1\"\n"
+                  "  },\n"
+                  "  {\n"
+                  "    \"a2\": 2,\n"
+                  "    \"b2\": [{\n"
+                  "        \"a21\": 5,\n"
+                  "        \"b21\": 6\n"
+                  "      },{\n"
+                  "        \"a22\": 7,\n"
+                  "        \"b22\": 8\n"
+                  "      }],\n"
+                  "    \"c2\": \"str2\"\n"
+                  "  }]\n"
+                  /utf8>>, format([{kvlist, [{a1, 1},
                                          {b1, [{kvlist, [{a11, 1}, {b11, 2}]},
                                                {kvlist, [{a12, 3}, {b12, 4}]}
                                               ]},
-                                         {c1, ~"str1"}
+                                         {c1, <<"str1"/utf8>>}
                                         ]},
                                {kvlist, [{a2, 2},
                                          {b2, [{kvlist, [{a21, 5}, {b21, 6}]}
                                               ,{kvlist, [{a22, 7}, {b22, 8}]}
                                               ]},
-                                         {c2, ~"str2"}
+                                         {c2, <<"str2"/utf8>>}
                                         ]}
                               ], Formatter)),
 
-    ?assertEqual(~"""
-                  {
-                    "a": 1,
-                    "b": {
-                      "aa": 10,
-                      "bb": 20
-                    },
-                    "c": "str"
-                  }
-                  """, format({kvlist_checked, [{a, 1},
+    ?assertEqual(<<
+                  "{\n"
+                  "  \"a\": 1,\n"
+                  "  \"b\": {\n"
+                  "    \"aa\": 10,\n"
+                  "    \"bb\": 20\n"
+                  "  },\n"
+                  "  \"c\": \"str\"\n"
+                  "}\n"
+                  /utf8>>, format({kvlist_checked, [{a, 1},
                                                 {b, {kvlist_checked, [{aa, 10}, {bb,20}]}},
-                                                {c, ~"str"}
+                                                {c, <<"str"/utf8>>}
                                                ]}, Formatter)),
 
-    ?assertEqual(~"""
-                  [{
-                      "a1": 1,
-                      "b1": [{
-                          "a11": 1,
-                          "b11": 2
-                        },{
-                          "a12": 3,
-                          "b12": 4
-                        }],
-                      "c1": "str1"
-                    },
-                    {
-                      "a2": 2,
-                      "b2": [{
-                          "a21": 5,
-                          "b21": 6
-                        },{
-                          "a22": 7,
-                          "b22": 8
-                        }],
-                      "c2": "str2"
-                    }]
-                  """, format([{kvlist_checked,
+    ?assertEqual(<<
+                  "[{\n"
+                  "    \"a1\": 1,\n"
+                  "    \"b1\": [{\n"
+                  "        \"a11\": 1,\n"
+                  "        \"b11\": 2\n"
+                  "      },{\n"
+                  "        \"a12\": 3,\n"
+                  "        \"b12\": 4\n"
+                  "      }],\n"
+                  "    \"c1\": \"str1\"\n"
+                  "  },\n"
+                  "  {\n"
+                  "    \"a2\": 2,\n"
+                  "    \"b2\": [{\n"
+                  "        \"a21\": 5,\n"
+                  "        \"b21\": 6\n"
+                  "      },{\n"
+                  "        \"a22\": 7,\n"
+                  "        \"b22\": 8\n"
+                  "      }],\n"
+                  "    \"c2\": \"str2\"\n"
+                  "  }]\n"
+                  /utf8>>, format([{kvlist_checked,
                                 [{a1, 1},
                                  {b1, [{kvlist_checked, [{a11, 1}, {b11, 2}]},
                                        {kvlist_checked, [{a12, 3}, {b12, 4}]}
                                       ]},
-                                 {c1, ~"str1"}
+                                 {c1, <<"str1"/utf8>>}
                                 ]},
                                {kvlist_checked,
                                 [{a2, 2},
                                  {b2, [{kvlist_checked, [{a21, 5}, {b21, 6}]}
                                       ,{kvlist_checked, [{a22, 7}, {b22, 8}]}
                                       ]},
-                                 {c2, ~"str2"}
+                                 {c2, <<"str2"/utf8>>}
                                 ]}
                               ], Formatter)),
 
 
     ?assertError({duplicate_key, a},
-                 format({kvlist_checked, [{a, 1}, {b, ~"str"}, {a, 2}]}, Formatter)),
+                 format({kvlist_checked, [{a, 1}, {b, <<"str"/utf8>>}, {a, 2}]}, Formatter)),
 
     %% on invalid input exact error is not specified
     ?assertError(_, format({kvlist, [{a, 1}, b]}, Formatter)),
@@ -570,81 +570,81 @@ test_format_proplist(_Config) ->
     ok.
 
 test_format_map(_Config) ->
-    ?assertEqual(~'{}\n', format(#{})),
-    ?assertEqual(~'{ "key": "val" }\n', format(#{key => val})),
-    MapSingleMap = ~"""
-    {
-      "key1": { "key3": "val3" },
-      "key2": 42
-    }
-    """,
+    ?assertEqual(<<"{}\n"/utf8>>, format(#{})),
+    ?assertEqual(<<"{ \"key\": \"val\" }\n"/utf8>>, format(#{key => val})),
+    MapSingleMap = <<
+    "{\n"
+    "  \"key1\": { \"key3\": \"val3\" },\n"
+    "  \"key2\": 42\n"
+    "}\n"
+    /utf8>>,
     ?assertEqual(MapSingleMap, format(#{key1 => #{key3 => val3}, key2 => 42})),
 
-    MapNestedMap = ~"""
-    {
-      "key1": {
-        "key3": true,
-        "key4": {
-          "deep1": 4711,
-          "deep2": "string"
-        }
-      },
-      "key2": 42
-    }
-    """,
+    MapNestedMap = <<
+    "{\n"
+    "  \"key1\": {\n"
+    "    \"key3\": true,\n"
+    "    \"key4\": {\n"
+    "      \"deep1\": 4711,\n"
+    "      \"deep2\": \"string\"\n"
+    "    }\n"
+    "  },\n"
+    "  \"key2\": 42\n"
+    "}\n"
+    /utf8>>,
     ?assertEqual(MapNestedMap, format(#{key1 => #{key3 => true,
-                                                  key4 => #{deep1 => 4711, deep2 => ~'string'}},
+                                                  key4 => #{deep1 => 4711, deep2 => <<"string"/utf8>>}},
                                         key2 => 42})),
-    MapIntList =  ~"""
-    {
-      "key1": [1,2,3,4,5],
-      "key2": 42
-    }
-    """,
+    MapIntList =  <<
+    "{\n"
+    "  \"key1\": [1,2,3,4,5],\n"
+    "  \"key2\": 42\n"
+    "}\n"
+    /utf8>>,
     ?assertEqual(MapIntList, format(#{key1 => lists:seq(1,5),
                                       key2 => 42})),
 
-    MapObjList =  ~"""
-    {
-      "key1": [
-        {
-          "key3": true,
-          "key4": [1,2,3,4,5]
-        },
-        {
-          "key3": true,
-          "key4": [1,2,3,4,5]
-        }
-      ],
-      "key2": 42
-    }
-    """,
+    MapObjList =  <<
+    "{\n"
+    "  \"key1\": [\n"
+    "    {\n"
+    "      \"key3\": true,\n"
+    "      \"key4\": [1,2,3,4,5]\n"
+    "    },\n"
+    "    {\n"
+    "      \"key3\": true,\n"
+    "      \"key4\": [1,2,3,4,5]\n"
+    "    }\n"
+    "  ],\n"
+    "  \"key2\": 42\n"
+    "}\n"
+    /utf8>>,
     ?assertEqual(MapObjList, format(#{key1 =>
                                           [#{key3 => true, key4 => lists:seq(1,5)},
                                            #{key3 => true, key4 => lists:seq(1,5)}],
                                       key2 => 42})),
 
-    MapObjList2 =  ~"""
-    {
-     "key1": [
-      {
-       "key3": true,
-       "key4": [1,2,
-        3,4,5,6,7,8,
-        9,10]
-      },
-      {
-       "key3": true,
-       "key_longer_name": [
-        1,
-        2,
-        3
-       ]
-      }
-     ],
-     "key2": 42
-    }
-    """,
+    MapObjList2 =  <<
+    "{\n"
+    " \"key1\": [\n"
+    "  {\n"
+    "   \"key3\": true,\n"
+    "   \"key4\": [1,2,\n"
+    "    3,4,5,6,7,8,\n"
+    "    9,10]\n"
+    "  },\n"
+    "  {\n"
+    "   \"key3\": true,\n"
+    "   \"key_longer_name\": [\n"
+    "    1,\n"
+    "    2,\n"
+    "    3\n"
+    "   ]\n"
+    "  }\n"
+    " ],\n"
+    " \"key2\": 42\n"
+    "}\n"
+    /utf8>>,
     ?assertEqual(MapObjList2, format(#{key1 =>
                                           [#{key3 => true, key4 => lists:seq(1,10)},
                                            #{key3 => true, key_longer_name => lists:seq(1,3)}],
@@ -657,9 +657,9 @@ test_format_map(_Config) ->
 -record(rec, {a,b,c}).
 
 test_format_fun(_Config) ->
-    All = #{types => [[], #{}, true, false, null, #{foo => ~"baz"}],
+    All = #{types => [[], #{}, true, false, null, #{foo => <<"baz"/utf8>>}],
             numbers => [1, -10, 0.0, -0.0, 2.0, -2.0],
-            strings => [~"three", ~"åäö", ~"mixed_Ω"],
+            strings => [<<"three"/utf8>>, <<"åäö"/utf8>>, <<"mixed_Ω"/utf8>>],
             user_data => #rec{a = 1, b = 2, c = 3}
            },
     Formatter = fun(#rec{a=A, b=B, c=C}, _Fun, _State) ->
@@ -668,25 +668,25 @@ test_format_fun(_Config) ->
                    (Other, Fun, State) ->
                         json:format_value(Other, Fun, State)
                 end,
-    Formatted = ~"""
-    {
-      "numbers": [1,-10,0.0,-0.0,2.0,-2.0],
-      "strings": [
-        "three",
-        "åäö",
-        "mixed_Ω"
-      ],
-      "types": [
-        [],
-        {},
-        true,
-        false,
-        null,
-        { "foo": "baz" }
-      ],
-      "user_data": {"type":"rec","a":1,"b":2,"c":3}
-    }
-    """,
+    Formatted = <<
+    "{\n"
+    "  \"numbers\": [1,-10,0.0,-0.0,2.0,-2.0],\n"
+    "  \"strings\": [\n"
+    "    \"three\",\n"
+    "    \"åäö\",\n"
+    "    \"mixed_Ω\"\n"
+    "  ],\n"
+    "  \"types\": [\n"
+    "    [],\n"
+    "    {},\n"
+    "    true,\n"
+    "    false,\n"
+    "    null,\n"
+    "    { \"foo\": \"baz\" }\n"
+    "  ],\n"
+    "  \"user_data\": {\"type\":\"rec\",\"a\":1,\"b\":2,\"c\":3}\n"
+    "}\n"
+    /utf8>>,
     ?assertEqual(Formatted, format(All, Formatter)),
     ok.
 
@@ -958,11 +958,11 @@ test_decode_api_stream(_Config) ->
               }"/utf8>>,
     ok = stream_decode(Types),
 
-    {12345, ok, B1} = json:decode(ews(~# 12345 "foo" #), ok, #{}),
+    {12345, ok, B1} = json:decode(ews(<<" 12345 \"foo\" "/utf8>>), ok, #{}),
     <<" \s\t\r\n", _/binary>> = B1,
     {<<"foo">>, ok, <<>>} = json:decode(B1, ok, #{}),
 
-    Multiple = ~#12345 1.30 "String1" -0.31e2\n["an array"]12345\n#,
+    Multiple = <<"12345 1.30 \"String1\" -0.31e2\n[\"an array\"]12345\n"/utf8>>,
     ok = multi_stream_decode(Multiple),
     ok.
 

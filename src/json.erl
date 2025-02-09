@@ -734,17 +734,17 @@ indent(#{level := Level, indent := Indent}) ->
     Steps = Level * Indent,
     {Steps, steps(Steps)}.
 
-steps(0)  -> ~"\n";
-steps(2)  -> ~"\n  ";
-steps(4)  -> ~"\n    ";
-steps(6)  -> ~"\n      ";
-steps(8)  -> ~"\n        ";
-steps(10) -> ~"\n          ";
-steps(12) -> ~"\n            ";
-steps(14) -> ~"\n              ";
-steps(16) -> ~"\n                ";
-steps(18) -> ~"\n                  ";
-steps(20) -> ~"\n                    ";
+steps(0)  -> <<"\n"/utf8>>;
+steps(2)  -> <<"\n  "/utf8>>;
+steps(4)  -> <<"\n    "/utf8>>;
+steps(6)  -> <<"\n      "/utf8>>;
+steps(8)  -> <<"\n        "/utf8>>;
+steps(10) -> <<"\n          "/utf8>>;
+steps(12) -> <<"\n            "/utf8>>;
+steps(14) -> <<"\n              "/utf8>>;
+steps(16) -> <<"\n                "/utf8>>;
+steps(18) -> <<"\n                  "/utf8>>;
+steps(20) -> <<"\n                    "/utf8>>;
 steps(N) ->  ["\n", lists:duplicate(N, " ")].
 
 %%
