@@ -10,6 +10,10 @@ The module and function names are exactly the same. Then, when your app supports
 >
 > There is no problem keeping this lib on OTP >= 27 when using `rebar`. The `beam` file is dropped on compilation time.
 
+## Requirements
+
+OTP >= 24.
+
 ## Installation
 
 ### Erlang
