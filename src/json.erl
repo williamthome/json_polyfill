@@ -541,7 +541,11 @@ error_info(Skip) ->
 %% Format implementation
 %%
 
+-if(?OTP_RELEASE >= 26).
 -type formatter() :: fun((Term :: dynamic(), Encoder :: formatter(), State :: map()) -> iodata()).
+-else.
+-type formatter() :: fun((Term :: term(), Encoder :: formatter(), State :: map()) -> iodata()).
+-endif.
 
 %% @doc Generates formatted JSON corresponding to `Term`.
 %% Similiar to `encode/1` but with added whitespaces for formatting.
@@ -553,15 +557,24 @@ error_info(Skip) ->
 %% }
 %% ok
 %% ```
+-if(?OTP_RELEASE >= 26).
 -spec format(Term :: dynamic()) -> iodata().
+-else.
+-spec format(Term :: term()) -> iodata().
+-endif.
 format(Term) ->
     Enc = fun format_value/3,
     format(Term, Enc, #{}).
 
 %% @doc Generates formatted JSON corresponding to `Term`.
 %% Equivalent to `format(Term, fun json:format_value/3, Options)` or `format(Term, Encoder, #{})`
+-if(?OTP_RELEASE >= 26).
 -spec format(Term :: encode_value(), Opts :: map()) -> iodata();
             (Term :: dynamic(), Encoder::formatter()) -> iodata().
+-else.
+-spec format(Term :: encode_value(), Opts :: map()) -> iodata();
+            (Term :: term(), Encoder::formatter()) -> iodata().
+-endif.
 format(Term, Options) when is_map(Options) ->
     Enc = fun format_value/3,
     format(Term, Enc, Options);
@@ -605,7 +618,12 @@ format(Term, Encoder, Options) when is_function(Encoder, 3) ->
 %% @doc Default format function used by `json:format/1`.
 %% Recursively calls `Encode` on all the values in `Value`,
 %% and indents objects and lists.
+-if(?OTP_RELEASE >= 26).
 -spec format_value(Value::dynamic(), Encode::formatter(), State::map()) -> iodata().
+-else.
+-spec format_value(Value::term(), Encode::formatter(), State::map()) -> iodata().
+-endif.
+-if(?OTP_RELEASE >= 26).
 format_value(Atom, UserEnc, State) when is_atom(Atom) ->
     json:encode_atom(Atom, fun(Value, Enc) ->  UserEnc(Value, Enc, State) end);
 format_value(Bin, _Enc, _State) when is_binary(Bin) ->
@@ -622,6 +640,24 @@ format_value(Map, UserEnc, State) when is_map(Map) ->
     format_key_value_list(OrderedKV, UserEnc, State);
 format_value(Other, _Enc, _State) ->
     error({unsupported_type, Other}).
+-else.
+format_value(Atom, UserEnc, State) when is_atom(Atom) ->
+    json:encode_atom(Atom, fun(Value, Enc) ->  UserEnc(Value, Enc, State) end);
+format_value(Bin, _Enc, _State) when is_binary(Bin) ->
+    json:encode_binary(Bin);
+format_value(Int, _Enc, _State) when is_integer(Int) ->
+    json:encode_integer(Int);
+format_value(Float, _Enc, _State) when is_float(Float) ->
+    json:encode_float(Float);
+format_value(List, UserEnc, State) when is_list(List) ->
+    format_list(List, UserEnc, State);
+format_value(Map, UserEnc, State) when is_map(Map) ->
+    %% Ensure order of maps are the same in each export
+    OrderedKV = lists:keysort(1, maps:to_list(Map)),
+    format_key_value_list(OrderedKV, UserEnc, State);
+format_value(Other, _Enc, _State) ->
+    error({unsupported_type, Other}).
+-endif.
 
 format_list([Head|Rest], UserEnc, #{level := Level, col := Col0, max := Max} = State0) ->
     State1 = State0#{level := Level+1},
