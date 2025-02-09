@@ -1,6 +1,6 @@
 {application, json_polyfill, [
     {description, "A polyfill for the OTP json module (EEP68)"},
-    {vsn, "0.2"},
+    {vsn, "0.2.0"},
     {registered, []},
     {applications, [
         kernel,

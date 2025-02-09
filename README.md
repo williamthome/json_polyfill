@@ -16,7 +16,7 @@ The module and function names are exactly the same. Then, when your app supports
 
 ```erlang
 % rebar.config
-{deps, [{json_polyfill, "0.2"}]}.
+{deps, [{json_polyfill, "~> 0.2"}]}.
 ```
 
 ### Elixir
