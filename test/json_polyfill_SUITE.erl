@@ -77,6 +77,8 @@ decode(_Config) ->
     %property_escape_all/1
 ]).
 
+-define(is_ws(X), X =:= $\s; X =:= $\t; X =:= $\r; X =:= $\n).
+
 suite() ->
     [
         %{ct_hooks, [ts_install_cth]},
@@ -668,7 +670,7 @@ test_decode_whitespace(_Config) ->
 
 %% add extra whitespace
 ews(Str) ->
-    unicode:characters_to_binary(string:replace(Str, <<" ">>, <<" \s\t\r\n">>)).
+    unicode:characters_to_binary(string:replace(Str, <<" ">>, <<" \s\t\r\n">>, all)).
 
 test_decode_api(_Config) ->
     put(history, []),
@@ -782,7 +784,11 @@ test_decode_api_stream(_Config) ->
               }"/utf8>>,
     ok = stream_decode(Types),
 
-    Multiple = <<"12345 1.30 \"String1\" -0.31e2\n[\"an array\"]12345"/utf8>>,
+    {12345, ok, B1} = json:decode(ews(~# 12345 "foo" #), ok, #{}),
+    <<" \s\t\r\n", _/binary>> = B1,
+    {<<"foo">>, ok, <<>>} = json:decode(B1, ok, #{}),
+
+    Multiple = ~#12345 1.30 "String1" -0.31e2\n["an array"]12345\n#,
     ok = multi_stream_decode(Multiple),
     ok.
 
@@ -816,7 +822,7 @@ multi_stream_decode(Strs) ->
         {R1, [], ContBin} ->
             multi_stream_decode(ContBin);
         Other ->
-            io:format("~p '~ts'~n~p~n", [R1,ContBin, Other]),
+            io:format("~p '~tp'~n~p~n", [R1,ContBin, Other]),
             error
     end.
 
@@ -824,14 +830,21 @@ byte_loop(Bin) ->
     {continue, State} = json:decode_start(<<>>, [], #{}),
     byte_loop(Bin, State, []).
 
-byte_loop(<<Byte, Rest/binary>>, State0, Bytes) ->
+byte_loop(<<Byte, Rest/binary>> = Orig, State0, Bytes) ->
     %% io:format("cont with '~s'  ~p~n",[lists:reverse([Byte|Bytes]), State0]),
     case json:decode_continue(<<Byte>>, State0) of
         {continue, State} ->
             byte_loop(Rest, State, [Byte|Bytes]);
         {Result, [], <<>>} ->
             %% trim to match the binary in return value
-            {Result, [], string:trim(Rest, leading)}
+            case string:trim(Rest, leading) of
+                <<>> ->
+                    {Result, [], <<>>};
+                _ when ?is_ws(Byte) ->
+                    {Result, [], Orig};
+                _ ->
+                    {Result, [], Rest}
+            end
     end;
 byte_loop(<<>>, State, _Bytes) ->
     json:decode_continue(end_of_input, State).
