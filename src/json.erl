@@ -48,6 +48,14 @@
 -export_type([encoder/0, encode_value/0]).
 
 -export([
+         format/1, format/2, format/3,
+         format_value/3,
+         format_key_value_list/3,
+         format_key_value_list_checked/3
+        ]).
+-export_type([formatter/0]).
+
+-export([
     decode/1, decode/3, decode_start/3, decode_continue/2
 ]).
 -export_type([
@@ -313,7 +321,7 @@ key(Key, _Encode) when is_integer(Key) -> [$", encode_integer(Key), $"];
 key(Key, _Encode) when is_float(Key) -> [$", encode_float(Key), $"].
 
 encode_object([]) -> <<"{}">>;
-encode_object([[_Comma | Entry] | Rest]) -> ["{", Entry, Rest, "}"].
+encode_object([[_Comma | Entry] | Rest]) -> [${, Entry, Rest, $}].
 
 %% @doc
 %% Default encoder for binaries as JSON strings used by `json:encode/1'.
@@ -528,6 +536,252 @@ invalid_byte(Bin, Skip) ->
 
 error_info(Skip) ->
     [{error_info, #{cause => #{position => Skip}}}].
+
+%%
+%% Format implementation
+%%
+
+-if(?OTP_RELEASE >= 26).
+-type formatter() :: fun((Term :: dynamic(), Encoder :: formatter(), State :: map()) -> iodata()).
+-else.
+-type formatter() :: fun((Term :: term(), Encoder :: formatter(), State :: map()) -> iodata()).
+-endif.
+
+%% @doc Generates formatted JSON corresponding to `Term`.
+%% Similiar to `encode/1` but with added whitespaces for formatting.
+%% ```erlang
+%% > io:put_chars(json:format(#{foo => <<"bar">>, baz => 52})).
+%% {
+%%   "baz": 52,
+%%   "foo": "bar"
+%% }
+%% ok
+%% ```
+-if(?OTP_RELEASE >= 26).
+-spec format(Term :: dynamic()) -> iodata().
+-else.
+-spec format(Term :: term()) -> iodata().
+-endif.
+format(Term) ->
+    Enc = fun format_value/3,
+    format(Term, Enc, #{}).
+
+%% @doc Generates formatted JSON corresponding to `Term`.
+%% Equivalent to `format(Term, fun json:format_value/3, Options)` or `format(Term, Encoder, #{})`
+-if(?OTP_RELEASE >= 26).
+-spec format(Term :: encode_value(), Opts :: map()) -> iodata();
+            (Term :: dynamic(), Encoder::formatter()) -> iodata().
+-else.
+-spec format(Term :: encode_value(), Opts :: map()) -> iodata();
+            (Term :: term(), Encoder::formatter()) -> iodata().
+-endif.
+format(Term, Options) when is_map(Options) ->
+    Enc = fun format_value/3,
+    format(Term, Enc, Options);
+format(Term, Encoder) when is_function(Encoder, 3) ->
+    format(Term, Encoder, #{}).
+
+%% @doc Generates formatted JSON corresponding to `Term`.
+%% Similar to `encode/2`, can be customised with the `Encoder` callback and `Options`.
+%% `Options` can include 'indent' to specify number of spaces per level and 'max' which loosely limits
+%% the width of lists.
+%% The `Encoder` will get a 'State' argument which contains the 'Options' maps merged with other data
+%% when recursing through 'Term'.
+%% `format_value/3` or various `encode_*` functions in this module can be used
+%% to help in constructing such callbacks.
+%% ```erlang
+%% > formatter({posix_time, SysTimeSecs}, Encode, State) ->
+%%     TimeStr = calendar:system_time_to_rfc3339(SysTimeSecs, [{offset, "Z"}]),
+%%     json:format_value(unicode:characters_to_binary(TimeStr), Encode, State);
+%% > formatter(Other, Encode, State) -> json:format_value(Other, Encode, State).
+%% >
+%% > Fun = fun(Value, Encode, State) -> formatter(Value, Encode, State) end.
+%% > Options = #{indent => 4}.
+%% > Term = #{id => 1, time => {posix_time, erlang:system_time(seconds)}}.
+%% >
+%% > io:put_chars(json:format(Term, Fun, Options)).
+%% {
+%%     "id": 1,
+%%     "time": "2024-05-23T16:07:48Z"
+%% }
+%% ok
+%% ```
+-spec format(Term :: encode_value(), Encoder::formatter(), Options :: map()) -> iodata().
+format(Term, Encoder, Options) when is_function(Encoder, 3) ->
+    Def = #{level => 0,
+            col => 0,
+            indent => 2,
+            max => 100
+           },
+    [Encoder(Term, Encoder, maps:merge(Def, Options)),$\n].
+
+%% @doc Default format function used by `json:format/1`.
+%% Recursively calls `Encode` on all the values in `Value`,
+%% and indents objects and lists.
+-if(?OTP_RELEASE >= 26).
+-spec format_value(Value::dynamic(), Encode::formatter(), State::map()) -> iodata().
+-else.
+-spec format_value(Value::term(), Encode::formatter(), State::map()) -> iodata().
+-endif.
+-if(?OTP_RELEASE >= 26).
+format_value(Atom, UserEnc, State) when is_atom(Atom) ->
+    json:encode_atom(Atom, fun(Value, Enc) ->  UserEnc(Value, Enc, State) end);
+format_value(Bin, _Enc, _State) when is_binary(Bin) ->
+    json:encode_binary(Bin);
+format_value(Int, _Enc, _State) when is_integer(Int) ->
+    json:encode_integer(Int);
+format_value(Float, _Enc, _State) when is_float(Float) ->
+    json:encode_float(Float);
+format_value(List, UserEnc, State) when is_list(List) ->
+    format_list(List, UserEnc, State);
+format_value(Map, UserEnc, State) when is_map(Map) ->
+    %% Ensure order of maps are the same in each export
+    OrderedKV = maps:to_list(maps:iterator(Map, ordered)),
+    format_key_value_list(OrderedKV, UserEnc, State);
+format_value(Other, _Enc, _State) ->
+    error({unsupported_type, Other}).
+-else.
+format_value(Atom, UserEnc, State) when is_atom(Atom) ->
+    json:encode_atom(Atom, fun(Value, Enc) ->  UserEnc(Value, Enc, State) end);
+format_value(Bin, _Enc, _State) when is_binary(Bin) ->
+    json:encode_binary(Bin);
+format_value(Int, _Enc, _State) when is_integer(Int) ->
+    json:encode_integer(Int);
+format_value(Float, _Enc, _State) when is_float(Float) ->
+    json:encode_float(Float);
+format_value(List, UserEnc, State) when is_list(List) ->
+    format_list(List, UserEnc, State);
+format_value(Map, UserEnc, State) when is_map(Map) ->
+    %% Ensure order of maps are the same in each export
+    OrderedKV = lists:keysort(1, maps:to_list(Map)),
+    format_key_value_list(OrderedKV, UserEnc, State);
+format_value(Other, _Enc, _State) ->
+    error({unsupported_type, Other}).
+-endif.
+
+format_list([Head|Rest], UserEnc, #{level := Level, col := Col0, max := Max} = State0) ->
+    State1 = State0#{level := Level+1},
+    {Len, IndentElement} = indent(State1),
+    if is_list(Head);   %% Indent list in lists
+       is_map(Head);    %% Indent maps
+       is_binary(Head); %% Indent Strings
+       Col0 > Max ->    %% Throw in the towel
+            State = State1#{col := Len},
+            First = UserEnc(Head, UserEnc, State),
+            {_, IndLast} = indent(State0),
+            [$[, IndentElement, First,
+             format_tail(Rest, UserEnc, State, IndentElement, IndentElement),
+             IndLast, $] ];
+       true ->
+            First = UserEnc(Head, UserEnc, State1),
+            Col = Col0 + 1 + erlang:iolist_size(First),
+            [$[, First,
+             format_tail(Rest, UserEnc, State1#{col := Col}, [], IndentElement),
+             $] ]
+    end;
+format_list([], _, _) ->
+    <<"[]">>.
+
+format_tail([Head|Tail], Enc, #{max := Max, col := Col0} = State, [], IndentRow)
+  when Col0 < Max ->
+    EncHead = Enc(Head, Enc, State),
+    String = [$,|EncHead],
+    Col = Col0 + 1 + erlang:iolist_size(EncHead),
+    [String|format_tail(Tail, Enc, State#{col := Col}, [], IndentRow)];
+format_tail([Head|Tail], Enc, State, [], IndentRow) ->
+    EncHead = Enc(Head, Enc, State),
+    String = [[$,|IndentRow]|EncHead],
+    Col = erlang:iolist_size(String)-2,
+    [String|format_tail(Tail, Enc, State#{col := Col}, [], IndentRow)];
+format_tail([Head|Tail], Enc, State, IndentAll, IndentRow) ->
+    %% These are handling their own indentation, so optimize away size calculation
+    EncHead = Enc(Head, Enc, State),
+    String = [[$,|IndentAll]|EncHead],
+    [String|format_tail(Tail, Enc, State, IndentAll, IndentRow)];
+format_tail([], _, _, _, _) ->
+    [].
+
+%% @doc Format function for lists of key-value pairs as JSON objects.
+%% Accepts lists with atom, binary, integer, or float keys.
+-spec format_key_value_list([{term(), term()}], Encode::formatter(), State::map()) -> iodata().
+format_key_value_list(KVList, UserEnc, #{level := Level} = State) ->
+    {_,Indent} = indent(State),
+    NextState = State#{level := Level+1},
+    {KISize, KeyIndent} = indent(NextState),
+    EncKeyFun = fun(KeyVal, _Fun) -> UserEnc(KeyVal, UserEnc, NextState) end,
+    EntryFun = fun({Key, Value}) ->
+                       EncKey = key(Key, EncKeyFun),
+                       ValState = NextState#{col := KISize + 2 + erlang:iolist_size(EncKey)},
+                       [$, , KeyIndent, EncKey, ": " | UserEnc(Value, UserEnc, ValState)]
+               end,
+    format_object(lists:map(EntryFun, KVList), Indent).
+
+%% @doc Format function for lists of key-value pairs as JSON objects.
+%% Accepts lists with atom, binary, integer, or float keys.
+%% Verifies that no duplicate keys will be produced in the
+%% resulting JSON object.
+%% ## Errors
+%% Raises `error({duplicate_key, Key})` if there are duplicates.
+-spec format_key_value_list_checked([{term(), term()}], Encoder::formatter(), State::map()) -> iodata().
+format_key_value_list_checked(KVList, UserEnc, State) when is_function(UserEnc, 3) ->
+    {_,Indent} = indent(State),
+    format_object(do_format_checked(KVList, UserEnc, State), Indent).
+
+do_format_checked([], _, _) ->
+    [];
+
+do_format_checked(KVList, UserEnc,  #{level := Level} = State) ->
+    NextState = State#{level := Level + 1},
+    {KISize, KeyIndent} = indent(NextState),
+    EncKeyFun = fun(KeyVal, _Fun) -> UserEnc(KeyVal, UserEnc, NextState) end,
+    EncListFun =
+        fun({Key, Value}, {Acc, Visited0}) ->
+                EncKey = iolist_to_binary(key(Key, EncKeyFun)),
+                case is_map_key(EncKey, Visited0) of
+                    true ->
+                        error({duplicate_key, Key});
+                    false ->
+                        Visited1 = Visited0#{EncKey => true},
+                        ValState = NextState#{col := KISize + 2 + erlang:iolist_size(EncKey)},
+                        EncEntry = [$, , KeyIndent, EncKey, ": "
+                                   | UserEnc(Value, UserEnc, ValState)],
+                        {[EncEntry | Acc], Visited1}
+                end
+        end,
+    {EncKVList, _} = lists:foldl(EncListFun, {[], #{}}, KVList),
+    lists:reverse(EncKVList).
+
+format_object([], _) -> <<"{}">>;
+format_object([[_Comma,KeyIndent|Entry]], Indent) ->
+    [_Key,_Colon|Value] = Entry,
+    {_, Rest} = string:take(Value, [$\s,$\n]),
+    [CP|_] = string:next_codepoint(Rest),
+    if CP =:= ${ ->
+            [${, KeyIndent, Entry, Indent, $}];
+       CP =:= $[ ->
+            [${, KeyIndent, Entry, Indent, $}];
+       true ->
+            ["{ ", Entry, " }"]
+    end;
+format_object([[_Comma,KeyIndent|Entry] | Rest], Indent) ->
+    [${, KeyIndent, Entry, Rest, Indent, $}].
+
+indent(#{level := Level, indent := Indent}) ->
+    Steps = Level * Indent,
+    {Steps, steps(Steps)}.
+
+steps(0)  -> <<"\n"/utf8>>;
+steps(2)  -> <<"\n  "/utf8>>;
+steps(4)  -> <<"\n    "/utf8>>;
+steps(6)  -> <<"\n      "/utf8>>;
+steps(8)  -> <<"\n        "/utf8>>;
+steps(10) -> <<"\n          "/utf8>>;
+steps(12) -> <<"\n            "/utf8>>;
+steps(14) -> <<"\n              "/utf8>>;
+steps(16) -> <<"\n                "/utf8>>;
+steps(18) -> <<"\n                  "/utf8>>;
+steps(20) -> <<"\n                    "/utf8>>;
+steps(N) ->  ["\n", lists:duplicate(N, " ")].
 
 %%
 %% Decoding implementation
@@ -1181,8 +1435,11 @@ continue(<<Rest/bits>>, Original, Skip, Acc, Stack0, Decode, Value) ->
     end.
 
 terminate(<<Byte, Rest/bits>>, Original, Skip, Acc, Value) when ?is_ws(Byte) ->
-    terminate(Rest, Original, Skip + 1, Acc, Value);
-terminate(<<Rest/bits>>, _Original, _Skip, Acc, Value) ->
+    terminate(Rest, Original, Skip, Acc, Value);
+terminate(<<>>, _, _Skip, Acc, Value) ->
+    {Value, Acc, <<>>};
+terminate(<<_/bits>>, Original, Skip, Acc, Value) ->
+    <<_:Skip/binary, Rest/binary>> = Original,
     {Value, Acc, Rest}.
 
 -spec unexpected_utf8(binary(), non_neg_integer()) -> no_return().

@@ -12,7 +12,7 @@ The module and function names are exactly the same. Then, when your app supports
 
 ```erlang
 % rebar.config
-{deps, [{json_polyfill, "0.1.4"}]}.
+{deps, [{json_polyfill, "0.2"}]}.
 ```
 
 ### Elixir
@@ -20,7 +20,7 @@ The module and function names are exactly the same. Then, when your app supports
 ```elixir
 # mix.exs
 def deps do
-  [{:json_polyfill, "~> 0.1.4"}]
+  [{:json_polyfill, "~> 0.2"}]
 end
 ```
 
@@ -72,6 +72,78 @@ An encoder that uses a heuristic to differentiate object-like lists of key-value
 > iolist_to_binary(custom_encode([{a, []}, {b, 1}])).
 <<"{\"a\":[],\"b\":1}">>
 ```
+
+## Format
+
+### format/1
+
+Generates formatted JSON corresponding to `Term`.
+Similiar to `encode/1` but with added whitespaces for formatting.
+
+```erlang
+> io:put_chars(json:format(#{foo => <<"bar">>, baz => 52})).
+{
+  "baz": 52,
+  "foo": "bar"
+}
+ok
+```
+
+### format/2
+
+Generates formatted JSON corresponding to `Term`.
+Equivalent to `format(Term, fun json:format_value/3, Options)` or `format(Term, Encoder, #{})`.
+
+### format/3
+
+Generates formatted JSON corresponding to `Term`.
+Similar to `encode/2`, can be customised with the `Encoder` callback and `Options`.
+`Options` can include 'indent' to specify number of spaces per level and 'max' which loosely limits
+the width of lists.
+The `Encoder` will get a 'State' argument which contains the 'Options' maps merged with other data
+when recursing through 'Term'.
+`format_value/3` or various `encode_*` functions in this module can be used
+to help in constructing such callbacks.
+
+```erlang
+> formatter({posix_time, SysTimeSecs}, Encode, State) ->
+    TimeStr = calendar:system_time_to_rfc3339(SysTimeSecs, [{offset, "Z"}]),
+    json:format_value(unicode:characters_to_binary(TimeStr), Encode, State);
+> formatter(Other, Encode, State) -> json:format_value(Other, Encode, State).
+>
+> Fun = fun(Value, Encode, State) -> formatter(Value, Encode, State) end.
+> Options = #{indent => 4}.
+> Term = #{id => 1, time => {posix_time, erlang:system_time(seconds)}}.
+>
+> io:put_chars(json:format(Term, Fun, Options)).
+{
+    "id": 1,
+    "time": "2024-05-23T16:07:48Z"
+}
+ok
+```
+
+### format_value/3
+
+Default format function used by `json:format/1`.
+Recursively calls `Encode` on all the values in `Value`,
+and indents objects and lists.
+
+### format_key_value_list/3
+
+Format function for lists of key-value pairs as JSON objects.
+Accepts lists with atom, binary, integer, or float keys.
+
+### format_key_value_list_checked/3
+
+@doc Format function for lists of key-value pairs as JSON objects.
+Accepts lists with atom, binary, integer, or float keys.
+Verifies that no duplicate keys will be produced in the
+resulting JSON object.
+
+#### Errors
+
+Raises `error({duplicate_key, Key})` if there are duplicates.
 
 ## Decode
 
