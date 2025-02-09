@@ -553,7 +553,7 @@ error_info(Skip) ->
 %% }
 %% ok
 %% ```
--spec format(Term :: encode_value()) -> iodata().
+-spec format(Term :: dynamic()) -> iodata().
 format(Term) ->
     Enc = fun format_value/3,
     format(Term, Enc, #{}).
