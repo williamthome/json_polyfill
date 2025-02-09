@@ -547,16 +547,16 @@ error_info(Skip) ->
 -type formatter() :: fun((Term :: term(), Encoder :: formatter(), State :: map()) -> iodata()).
 -endif.
 
-%% @doc Generates formatted JSON corresponding to `Term`.
-%% Similiar to `encode/1` but with added whitespaces for formatting.
-%% ```erlang
+%% @doc Generates formatted JSON corresponding to `Term'.
+%% Similiar to `encode/1' but with added whitespaces for formatting.
+%% ```
 %% > io:put_chars(json:format(#{foo => <<"bar">>, baz => 52})).
 %% {
 %%   "baz": 52,
 %%   "foo": "bar"
 %% }
 %% ok
-%% ```
+%% '''
 -if(?OTP_RELEASE >= 26).
 -spec format(Term :: dynamic()) -> iodata().
 -else.
@@ -566,8 +566,8 @@ format(Term) ->
     Enc = fun format_value/3,
     format(Term, Enc, #{}).
 
-%% @doc Generates formatted JSON corresponding to `Term`.
-%% Equivalent to `format(Term, fun json:format_value/3, Options)` or `format(Term, Encoder, #{})`
+%% @doc Generates formatted JSON corresponding to `Term'.
+%% Equivalent to `format(Term, fun json:format_value/3, Options)' or `format(Term, Encoder, #{})'
 -if(?OTP_RELEASE >= 26).
 -spec format(Term :: encode_value(), Opts :: map()) -> iodata();
             (Term :: dynamic(), Encoder::formatter()) -> iodata().
@@ -589,7 +589,7 @@ format(Term, Encoder) when is_function(Encoder, 3) ->
 %% when recursing through 'Term'.
 %% `format_value/3` or various `encode_*` functions in this module can be used
 %% to help in constructing such callbacks.
-%% ```erlang
+%% ```
 %% > formatter({posix_time, SysTimeSecs}, Encode, State) ->
 %%     TimeStr = calendar:system_time_to_rfc3339(SysTimeSecs, [{offset, "Z"}]),
 %%     json:format_value(unicode:characters_to_binary(TimeStr), Encode, State);
@@ -605,7 +605,7 @@ format(Term, Encoder) when is_function(Encoder, 3) ->
 %%     "time": "2024-05-23T16:07:48Z"
 %% }
 %% ok
-%% ```
+%% '''
 -spec format(Term :: encode_value(), Encoder::formatter(), Options :: map()) -> iodata().
 format(Term, Encoder, Options) when is_function(Encoder, 3) ->
     Def = #{level => 0,
@@ -615,8 +615,8 @@ format(Term, Encoder, Options) when is_function(Encoder, 3) ->
            },
     [Encoder(Term, Encoder, maps:merge(Def, Options)),$\n].
 
-%% @doc Default format function used by `json:format/1`.
-%% Recursively calls `Encode` on all the values in `Value`,
+%% @doc Default format function used by `json:format/1'.
+%% Recursively calls `Encode' on all the values in `Value',
 %% and indents objects and lists.
 -if(?OTP_RELEASE >= 26).
 -spec format_value(Value::dynamic(), Encode::formatter(), State::map()) -> iodata().
@@ -720,8 +720,10 @@ format_key_value_list(KVList, UserEnc, #{level := Level} = State) ->
 %% Accepts lists with atom, binary, integer, or float keys.
 %% Verifies that no duplicate keys will be produced in the
 %% resulting JSON object.
-%% ## Errors
-%% Raises `error({duplicate_key, Key})` if there are duplicates.
+%%
+%% Errors
+%%
+%% Raises `error({duplicate_key, Key})' if there are duplicates.
 -spec format_key_value_list_checked([{term(), term()}], Encoder::formatter(), State::map()) -> iodata().
 format_key_value_list_checked(KVList, UserEnc, State) when is_function(UserEnc, 3) ->
     {_,Indent} = indent(State),
