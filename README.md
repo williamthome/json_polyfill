@@ -4,7 +4,11 @@ This lib is just a copy of the `json` module proposed in [EEP 68](https://www.er
 
 Its intent is to act as a polyfill for apps that cannot currently be updated to OTP 27 or higher.
 
-The module and function names are exactly the same. Then, when your app supports OTP >= 27, just remove this lib from the dependencies.
+The module and function names are exactly the same. Then, when your app supports OTP >= 27, just optionally remove this lib from the dependencies.
+
+> [!NOTE]
+>
+> There is no problem keeping this lib on OTP >= 27 when using `rebar`. The `beam` file is dropped on compilation time.
 
 ## Installation
 
