@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         otp-version: [24, 25, 26, 27]
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-2019, windows-2022]
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
