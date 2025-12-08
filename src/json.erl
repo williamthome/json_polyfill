@@ -970,7 +970,7 @@ decode_start(Binary, Acc, Decoders) when is_binary(Binary) ->
 %% {123,ok,<<>>}
 %% '''
 %% @end
--spec decode_continue(binary() | end_of_input, Opaque::term()) ->
+-spec decode_continue(binary() | end_of_input, State :: continuation_state()) ->
           {Result :: term(), Acc :: term(), binary()} | {continue, continuation_state()}.
 decode_continue(end_of_input, State) ->
     case State of
