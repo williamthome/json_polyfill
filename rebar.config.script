@@ -7,7 +7,7 @@ end,
 
 NewHooks = case OtpVersion >= 27 of
     true ->
-        [{erlc_compile, "rm \"$REBAR_DEPS_DIR/json_polyfill/ebin/json.beam\""}];
+        [{erlc_compile, "rm -f \"$REBAR_DEPS_DIR/json_polyfill/ebin/json.beam\""}];
     false ->
         []
 end,
