@@ -109,7 +109,7 @@
     | encode_map(encode_value()).
 %% Simple JSON value encodeable with `json:encode/1'.
 
--type encode_map(Value) :: #{binary() | atom() | integer() => Value}.
+-type encode_map(Value) :: #{binary() | atom() | integer() | float() => Value}.
 
 %% @doc
 %% Generates JSON corresponding to `Term'.
@@ -127,6 +127,9 @@
 %% | `#{binary() => _}'     | Object   |
 %% | `#{atom() => _}'       | Object   |
 %% | `#{integer() => _}'    | Object   |
+%% | `#{float() => _}'      | Object   |
+%%
+%% Map keys are encoded as JSON object names, which are strings.
 %%
 %% This is equivalent to `encode(Term, fun json:encode_value/2)'.
 %%
@@ -241,7 +244,8 @@ list_loop([Elem | Rest], Encode) -> [$,, Encode(Elem, Encode) | list_loop(Rest, 
 %% @doc
 %% Default encoder for maps as JSON objects used by `json:encode/1'.
 %%
-%% Accepts maps with atom, binary, integer, or float keys.
+%% Accepts Erlang maps with atom, binary, integer, or float keys.
+%% The keys are encoded as JSON object names.
 %% @end
 -spec encode_map(encode_map(term()), encoder()) -> iodata().
 encode_map(Map, Encode) when is_map(Map) ->
@@ -260,7 +264,8 @@ do_encode_map(Map, Encode) when is_function(Encode, 2) ->
 %% @doc
 %% Encoder for maps as JSON objects.
 %%
-%% Accepts maps with atom, binary, integer, or float keys.
+%% Accepts Erlang maps with atom, binary, integer, or float keys.
+%% The keys are encoded as JSON object names.
 %% Verifies that no duplicate keys will be produced in the
 %% resulting JSON object.
 %%
@@ -275,7 +280,8 @@ encode_map_checked(Map, Encode) ->
 %% @doc
 %% Encoder for lists of key-value pairs as JSON objects.
 %%
-%% Accepts lists with atom, binary, integer, or float keys.
+%% Accepts key-value lists with atom, binary, integer, or float keys.
+%% The keys are encoded as JSON object names.
 %% @end
 -spec encode_key_value_list([{term(), term()}], encoder()) -> iodata().
 encode_key_value_list(List, Encode) when is_function(Encode, 2) ->
@@ -284,7 +290,8 @@ encode_key_value_list(List, Encode) when is_function(Encode, 2) ->
 %% @doc
 %% Encoder for lists of key-value pairs as JSON objects.
 %%
-%% Accepts lists with atom, binary, integer, or float keys.
+%% Accepts key-value lists with atom, binary, integer, or float keys.
+%% The keys are encoded as JSON object names.
 %% Verifies that no duplicate keys will be produced in the
 %% resulting JSON object.
 %%
@@ -702,7 +709,8 @@ format_tail([], _, _, _, _) ->
     [].
 
 %% @doc Format function for lists of key-value pairs as JSON objects.
-%% Accepts lists with atom, binary, integer, or float keys.
+%% Accepts key-value lists with atom, binary, integer, or float keys.
+%% The keys are encoded as JSON object names.
 -spec format_key_value_list([{term(), term()}], Encode::formatter(), State::map()) -> iodata().
 format_key_value_list(KVList, UserEnc, #{level := Level} = State) ->
     {_,Indent} = indent(State),
@@ -717,7 +725,8 @@ format_key_value_list(KVList, UserEnc, #{level := Level} = State) ->
     format_object(lists:map(EntryFun, KVList), Indent).
 
 %% @doc Format function for lists of key-value pairs as JSON objects.
-%% Accepts lists with atom, binary, integer, or float keys.
+%% Accepts key-value lists with atom, binary, integer, or float keys.
+%% The keys are encoded as JSON object names.
 %% Verifies that no duplicate keys will be produced in the
 %% resulting JSON object.
 %%
