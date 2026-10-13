@@ -177,13 +177,51 @@
     Byte =:= 127
 ).
 
--define(are_all_ascii_plain(B1, B2, B3, B4, B5, B6, B7, B8),
-    (?is_ascii_plain(B1)) andalso
-    (?is_ascii_plain(B2)) andalso
-    (?is_ascii_plain(B3)) andalso
-    (?is_ascii_plain(B4)) andalso
-    (?is_ascii_plain(B5)) andalso
-    (?is_ascii_plain(B6)) andalso
-    (?is_ascii_plain(B7)) andalso
-    (?is_ascii_plain(B8))
+%% SWAR (SIMD Within A Register) helpers for validating 7 bytes at once.
+%%
+%% We use 56 bits (7 bytes) because it is the largest value that fits
+%% in a BEAM small integer (59-bit on 64-bit). This ensures bitwise and
+%% arithmetic guard operations (band, bor, bxor, +, -) compile to fast
+%% native code without bignum fallback.
+%%
+%% Call sites must provide a byte-by-byte fallback when SWAR checks fail.
+
+-define(SWAR_MASK80, 16#80808080808080).
+-define(SWAR_MASK01, 16#01010101010101).
+
+%% Detect if any byte in a 56-bit word is zero (Mycroft's trick).
+%%
+%% This is a simplified variant that omits the standard (bnot V) term.
+%% The full formula is: ((V - 0x01..01) band (bnot V) band 0x80..80).
+%% The (bnot V) term filters out false positives from bytes >= 0x80,
+%% where subtracting 0x01 does not clear the high bit. This term is
+%% unnecessary when all bytes of the input word are already known to be
+%% < 128 before no_zero_byte is reached (andalso short-circuit), and
+%% XOR of two 7-bit values is still 7-bit, so no byte in V can have bit 7 set.
+%%
+%% We also avoid bnot because the JIT lacks an always_small fast path
+%% for it, emitting runtime type checks and bignum fallback calls even
+%% when the result provably fits in a small.
+%%
+%% Borrow propagation between bytes may cause rare false positives
+%% (a non-zero byte adjacent to a zero byte detected as zero), but
+%% these are harmless: callers fall through to a correct byte-by-byte path.
+-define(no_zero_byte(V),
+    ((V) - ?SWAR_MASK01) band ?SWAR_MASK80 =:= 0
+).
+
+%% SWAR check: all 7 bytes (in one 56-bit word) are "plain ASCII"
+%% i.e., in [32, 127] and not $" (0x22) or $\\ (0x5C).
+%%
+%% Four checks, each operating on all 7 bytes simultaneously:
+%%   1. band with 0x80..80 detects bytes >= 128
+%%   2. add 0x60..60 then band 0x80..80 detects bytes < 32
+%%      (byte + 0x60 sets the high bit iff byte >= 0x20, given byte < 0x80)
+%%   3. XOR with 0x22..22 maps $" to 0, then no_zero_byte detects it
+%%   4. XOR with 0x5C..5C maps $\\ to 0, then no_zero_byte detects it
+-define(are_all_ascii_plain_swar(W),
+    (W) band ?SWAR_MASK80 =:= 0 andalso
+    ((W) + 16#60606060606060) band ?SWAR_MASK80 =:= ?SWAR_MASK80 andalso
+    ?no_zero_byte((W) bxor 16#22222222222222) andalso
+    ?no_zero_byte((W) bxor 16#5C5C5C5C5C5C5C)
 ).
