@@ -24,12 +24,12 @@ jobs:
     strategy:
       matrix:
         otp-version: [24, 25, 26, 27]
-        os: [ubuntu-latest, windows-2022]
+        os: [ubuntu-24.04, windows-2022]
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: erlef/setup-beam@b9c58b0450cd832ccdb3c17cc156a47065d2114f # v1.18.1
+      - uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124 # v1.24.1
         id: setup-beam
         with:
           otp-version: ${{matrix.otp-version}}
