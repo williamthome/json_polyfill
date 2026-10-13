@@ -38,3 +38,39 @@ jobs:
       - name: Test
         run: |
           rebar3 ct
+
+  plugin:
+    name: rebar3 plugin / OTP-${{matrix.otp-version}}
+
+    runs-on: ubuntu-24.04
+
+    strategy:
+      matrix:
+        # rebar3 >= 3.24 does not run on OTP 24, and the manifest of rebar3 3.23
+        # does not need `json`, so on OTP 24 this only checks the plugin loads cleanly
+        include:
+          - otp-version: 24
+            rebar3-version: 3.23.0
+          - otp-version: 25
+            rebar3-version: 3.24.0
+          - otp-version: 26
+            rebar3-version: 3.24.0
+          - otp-version: 27
+            rebar3-version: 3.24.0
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124 # v1.24.1
+        with:
+          otp-version: ${{matrix.otp-version}}
+          rebar3-version: ${{matrix.rebar3-version}}
+
+      - name: Test loading as a rebar3 plugin
+        run: |
+          mkdir -p "$RUNNER_TEMP/demo/src" && cd "$RUNNER_TEMP/demo"
+          echo '{application, demo, [{vsn, "0.1.0"}, {applications, [kernel, stdlib]}]}.' > src/demo.app.src
+          echo "{plugins, [{json_polyfill, {git, \"file://$GITHUB_WORKSPACE\", {ref, \"$GITHUB_SHA\"}}}]}." > rebar.config
+          rebar3 experimental manifest --to manifest.json 2>&1 | tee output.log
+          if grep -q "Errors loading plugin\|does not export init/1" output.log; then exit 1; fi
+          test -s manifest.json
