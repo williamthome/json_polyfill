@@ -353,15 +353,15 @@ escape_binary(Bin) -> escape_binary_ascii(Bin, [$"], Bin, 0, 0).
 
 escape_binary_ascii(Binary, Acc, Orig, Skip, Len) ->
     case Binary of
-        <<B1, B2, B3, B4, B5, B6, B7, B8, Rest/binary>> when ?are_all_ascii_plain(B1, B2, B3, B4, B5, B6, B7, B8) ->
-            escape_binary_ascii(Rest, Acc, Orig, Skip, Len + 8);
+        <<W:56, Rest/binary>> when ?are_all_ascii_plain_swar(W) ->
+            escape_binary_ascii(Rest, Acc, Orig, Skip, Len + 7);
         Other ->
             escape_binary(Other, Acc, Orig, Skip, Len)
     end.
 
 escape_binary(<<Byte, Rest/binary>>, Acc, Orig, Skip, Len) when ?is_ascii_plain(Byte) ->
-    %% we got here because there were either less than 8 bytes left
-    %% or we have an escape in the next 8 bytes,
+    %% we got here because there were either less than 7 bytes left
+    %% or we have an escape in the next 7 bytes,
     %% escape_binary_ascii would fail and dispatch here anyway
     escape_binary(Rest, Acc, Orig, Skip, Len + 1);
 escape_binary(<<Byte, Rest/binary>>, Acc, Orig, Skip0, Len) when ?is_ascii_escape(Byte) ->
@@ -402,8 +402,8 @@ escape_all(Bin) -> escape_all_ascii(Bin, [$"], Bin, 0, 0).
 
 escape_all_ascii(Binary, Acc, Orig, Skip, Len) ->
     case Binary of
-        <<B1, B2, B3, B4, B5, B6, B7, B8, Rest/binary>> when ?are_all_ascii_plain(B1, B2, B3, B4, B5, B6, B7, B8) ->
-            escape_all_ascii(Rest, Acc, Orig, Skip, Len + 8);
+        <<W:56, Rest/binary>> when ?are_all_ascii_plain_swar(W) ->
+            escape_all_ascii(Rest, Acc, Orig, Skip, Len + 7);
         Other ->
             escape_all(Other, Acc, Orig, Skip, Len)
     end.
@@ -1164,8 +1164,8 @@ string(Binary, Original, Skip, Acc, Stack, Decode) ->
 
 string_ascii(Binary, Original, Skip, Acc, Stack, Decode, Len) ->
     case Binary of
-        <<B1, B2, B3, B4, B5, B6, B7, B8, Rest/binary>> when ?are_all_ascii_plain(B1, B2, B3, B4, B5, B6, B7, B8) ->
-            string_ascii(Rest, Original, Skip, Acc, Stack, Decode, Len + 8);
+        <<W:56, Rest/binary>> when ?are_all_ascii_plain_swar(W) ->
+            string_ascii(Rest, Original, Skip, Acc, Stack, Decode, Len + 7);
         Other ->
             string(Other, Original, Skip, Acc, Stack, Decode, Len)
     end.
@@ -1207,8 +1207,8 @@ string_utf8(_, Orig, Skip, Acc, Stack, Decode, Len, _State0) ->
 
 string_ascii(Binary, Original, Skip, Acc, Stack, Decode, Start, Len, SAcc) ->
     case Binary of
-        <<B1, B2, B3, B4, B5, B6, B7, B8, Rest/binary>> when ?are_all_ascii_plain(B1, B2, B3, B4, B5, B6, B7, B8) ->
-            string_ascii(Rest, Original, Skip, Acc, Stack, Decode, Start, Len + 8, SAcc);
+        <<W:56, Rest/binary>> when ?are_all_ascii_plain_swar(W) ->
+            string_ascii(Rest, Original, Skip, Acc, Stack, Decode, Start, Len + 7, SAcc);
         Other ->
             string(Other, Original, Skip, Acc, Stack, Decode, Start, Len, SAcc)
     end.
