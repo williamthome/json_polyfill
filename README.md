@@ -32,6 +32,17 @@ def deps do
 end
 ```
 
+### rebar3 plugin
+
+Some rebar3 commands need the `json` module inside rebar3 itself, e.g.
+`rebar3 experimental manifest`, used by [ELP](https://whatsapp.github.io/erlang-language-platform/).
+On OTP < 27, add this lib as a plugin to make it available there:
+
+```erlang
+% rebar.config
+{plugins, [{json_polyfill, "~> 0.2"}]}.
+```
+
 ## Encode
 
 ### encode/1

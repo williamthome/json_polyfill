@@ -6,7 +6,7 @@
         kernel,
         stdlib
     ]},
-    {env, []},
+    {env, [{providers, []}]},
     {modules, []},
     {licenses, ["Apache-2.0"]},
     {links, [
