@@ -852,6 +852,7 @@ steps(N) ->  ["\n", lists:duplicate(N, " ")].
 %% | Boolean  | `true \| false'        |
 %% | Null     | `null'                 |
 %% | String   | `binary()'             |
+%% | Array    | `list()'               |
 %% | Object   | `#{binary() => _}'     |
 %%
 %% Errors
