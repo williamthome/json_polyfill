@@ -573,11 +573,7 @@ error_info(Skip) ->
 %% }
 %% ok
 %% '''
--if(?OTP_RELEASE >= 26).
--spec format(Term :: dynamic()) -> iodata().
--else.
--spec format(Term :: term()) -> iodata().
--endif.
+-spec format(Term :: encode_value()) -> iodata().
 format(Term) ->
     Enc = fun format_value/3,
     format(Term, Enc, #{}).
@@ -622,7 +618,11 @@ format(Term, Encoder) when is_function(Encoder, 3) ->
 %% }
 %% ok
 %% '''
--spec format(Term :: encode_value(), Encoder::formatter(), Options :: map()) -> iodata().
+-if(?OTP_RELEASE >= 26).
+-spec format(Term :: dynamic(), Encoder::formatter(), Options :: map()) -> iodata().
+-else.
+-spec format(Term :: term(), Encoder::formatter(), Options :: map()) -> iodata().
+-endif.
 format(Term, Encoder, Options) when is_function(Encoder, 3) ->
     Def = #{level => 0,
             col => 0,
